@@ -1,12 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import DashboardUser from './Pages/DashboardUser';
+import logo from "./logo.svg";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import OrderPage from "./Pages/OrderPage";
 
 function App() {
   return (
     <div className="App">
-      <DashboardUser/>
+      <OrderPage />
     </div>
   );
 }
