@@ -13,3 +13,24 @@
   color: #00bf63 !important; /* Warna teks saat di-hover */
   border-color: #00bf63 !important; /* Warna border saat di-hover */
 }
+
+.add-to-cart.btn {
+  background-color: #00bf63 !important; /* Warna background custom */
+  color: #fff !important; /* Warna teks */
+  border-color: #00bf63 !important; /* Warna border */
+}
+
+.add-to-cart.btn:hover {
+  background-color: #ffffff !important; /* Warna background saat di-hover */
+  color: #00bf63 !important; /* Warna teks saat di-hover */
+  border-color: #00bf63 !important; /* Warna border saat di-hover */
+}
+
+@media (max-width: 767.98px) {
+  .add-to-cart {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+  }
+}
