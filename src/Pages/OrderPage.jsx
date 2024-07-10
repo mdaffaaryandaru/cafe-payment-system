@@ -1,12 +1,12 @@
-import CarouselSlide from "../Components/CarouselSlide";
-import OrderSection from "../Components/OrderSection";
+import CarouselSlide from "../Components/OrderPageComponent/CarouselSlide";
+import OrderSection from "../Components/OrderPageComponent/OrderSection";
 
-function OrderPage() {
+export const OrderPage = () => {
   return (
     <>
       <CarouselSlide />
       <OrderSection />
     </>
   );
-}
+};
 export default OrderPage;

@@ -1,10 +1,10 @@
 import Carousel from "react-bootstrap/Carousel";
-import CarouselImage from "../Assets/Carousel-image.png";
+import CarouselImage from "../../Assets/Carousel-image.png";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 
-const CarouselSlide = () => {
+export const CarouselSlide = () => {
   return (
     <Container fluid>
       <Row>

@@ -1,11 +1,10 @@
-/** CSS untuk carousel */
-
 /** CSS untuk tombol navigasi */
 
 .filter-button.btn {
   background-color: #00bf63 !important; /* Warna background custom */
   color: #fff !important; /* Warna teks */
   border-color: #00bf63 !important; /* Warna border */
+  font-weight: bold;
 }
 
 .filter-button.btn:hover {
@@ -33,4 +32,11 @@
     line-height: 1.5;
     border-radius: 0.2rem;
   }
+}
+
+/** CSS untuk global */
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+body {
+  font-family: "Roboto Mono", monospace;
 }

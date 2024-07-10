@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Card, Button, Container, Row, Col, Form } from "react-bootstrap";
-import Coffe from "../Assets/Coffe.jpg";
+import Coffe from "../../Assets/Coffe.jpg";
 
-const OrderSection = () => {
+export const OrderSection = () => {
   const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (e) => {
@@ -28,8 +28,8 @@ const OrderSection = () => {
         </Col>
       </Row>
       <Row className="justify-content-center mt-5">
-        <Col xs={12}>
-          <Card>
+        <Col md={8} xs={12}>
+          <Card className="shadow">
             <Row noGutters={true} className="align-items-stretch">
               <Col xs={4} md={2} className="d-flex">
                 <Card.Img
@@ -41,7 +41,7 @@ const OrderSection = () => {
               </Col>
               <Col xs={8} md={8}>
                 <Card.Body>
-                  <Card.Title>Coffee Name</Card.Title>
+                  <Card.Title className="fw-bold">Coffee Name</Card.Title>
                   <Card.Text>Coffe Dengan Sianida</Card.Text>
                   <Row>
                     <Col sm={12} md={6}>
@@ -53,11 +53,9 @@ const OrderSection = () => {
                         disabled
                       />
                     </Col>
-                    <Col
-                      sm={12}
-                      md={6}
-                      className="d-flex align-items-end justify-content-md-end mt-2 mt-md-0"
-                    >
+                  </Row>
+                  <Row>
+                    <Col sm={12} md={6} className="d-flex mt-3">
                       <Button className="add-to-cart">Order</Button>
                     </Col>
                   </Row>

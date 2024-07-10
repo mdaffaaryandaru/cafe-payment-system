@@ -1,13 +1,18 @@
-import logo from "./logo.svg";
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import OrderPage from "./Pages/OrderPage";
+import AdminPage from "./Pages/AdminPage";
 
 function App() {
   return (
-    <div className="App">
-      <OrderPage />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/admin-00124" element={<AdminPage />} />
+          <Route path="/order" element={<OrderPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
