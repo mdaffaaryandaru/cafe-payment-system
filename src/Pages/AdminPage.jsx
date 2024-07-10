@@ -1,10 +1,9 @@
-import Sidebar from "../Components/AdminPageComponent/SideBar";
+import Sidebar from "../Components/SideBar";
 
 export const AdminPage = () => {
   return (
     <>
       <Sidebar />
-      
     </>
   );
 };
