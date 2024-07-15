@@ -1,15 +1,10 @@
 import Carousel from "react-bootstrap/Carousel";
-import CarouselImage from "../Assets/Carousel-image.png";
+import CarouselImage from "../../Assets/Carousel-image.png";
 import { useState } from "react";
 import { Card, Button, Container, Row, Col, Form } from "react-bootstrap";
-import Coffe from "../Assets/Coffe.jpg";
+import Coffe from "../../Assets/Coffe.jpg";
 
 export const OrderPage = () => {
-  const [quantity, setQuantity] = useState(1);
-
-  const handleQuantityChange = (e) => {
-    setQuantity(e.target.value);
-  };
   return (
     <>
       <Container fluid>

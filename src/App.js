@@ -1,18 +1,30 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import OrderPage from "./Pages/OrderPage";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { ColorModeContext, useMode } from "./theme.jsx";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Routes, Route } from "react-router-dom";
+import Topbar from "./Pages/Global/Topbar.jsx";
+import Dashboard from "./Pages/Dashboard/Dashboard.jsx";
+import OrderPage from "./Pages/OrderPage/OrderPage.jsx";
 
 function App() {
+  const { colorMode, theme } = useMode();
+
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/order" element={<OrderPage />} />
-        </Routes>
-      </div>
-    </Router>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="App">
+          <main className="content">
+            <Topbar />
+            <Routes>
+              <Route path="/" element={Dashboard}></Route>
+              <Route path="/order" element={OrderPage}></Route>
+            </Routes>
+          </main>
+        </div>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
