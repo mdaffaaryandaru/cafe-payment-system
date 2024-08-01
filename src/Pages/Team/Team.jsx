@@ -1,4 +1,5 @@
-import { Typography, Box, useTheme } from "@mui/material";
+import { Typography, Box, useTheme, Modal, Button } from "@mui/material";
+import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataTeam } from "../../data/MockData";
@@ -7,9 +8,23 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../Components/Header";
 
+const styleModal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  // for open modal add
+  const [open, setOpen] = React.useState(false);
 
   const columns = [
     {
@@ -73,6 +88,24 @@ const Team = () => {
   return (
     <Box m="20px">
       <Header title="TEAM" subtitle="Manage Your Team" />
+      <div>
+        <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Tambah Karyawan</Button>
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={styleModal}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Text in a modal
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Modal>
+      </div>
       <Box
         m="40px 0 0 0"
         height="75vh"
