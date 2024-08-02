@@ -1,22 +1,21 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Menu {
+export class Pegawai {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  namaMenu: string;
+  namaPegawai: string;
 
   @Column()
-  stokMenu: number;
+  alamatPegawai: string;
 
   @Column()
-  kategoriMenu: string;
+  noHpPegawai: string;
 
   @Column()
-  hargaMenu: string;
+  statusPegawai: string;
 
-  @Column({ nullable: true })
-  gambarMenu: string;
+
 }

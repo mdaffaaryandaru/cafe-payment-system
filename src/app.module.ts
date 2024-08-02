@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MenuModule } from './menu/menu.module';
 import { Menu } from './menu/menu.entity';
+import { PegawaiController } from './pegawai/pegawai.controller';
+import { PegawaiModule } from './pegawai/pegawai.module';
 
 @Module({
   imports: [
@@ -18,8 +20,9 @@ import { Menu } from './menu/menu.entity';
       synchronize: true,
     }),
     MenuModule,
+    PegawaiModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, PegawaiController],
   providers: [AppService],
 })
 export class AppModule {}

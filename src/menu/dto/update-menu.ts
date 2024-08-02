@@ -1,12 +1,6 @@
-import {
-  IsString,
-  IsNotEmpty,
-  Matches,
-  IsInt,
-  IsOptional,
-} from 'class-validator';
+import { IsString, IsNotEmpty, Matches, IsInt } from 'class-validator';
 
-export class CreateMenuDto {
+export class UpdateMenuDto {
   // make example for dto menu
   @IsString()
   @IsNotEmpty()
@@ -27,7 +21,5 @@ export class CreateMenuDto {
   })
   hargaMenu: string;
 
-  @IsOptional()
-  @IsString()
   gambarMenu?: string;
 }

@@ -10,24 +10,17 @@ export class CreateMenuDto {
   // make example for dto menu
   @IsString()
   @IsNotEmpty()
-  namaMenu: string;
-
-  @IsInt()
-  @IsNotEmpty()
-  stokMenu: number;
+  namaPegawai: string;
 
   @IsString()
   @IsNotEmpty()
-  kategoriMenu: string;
+  alamatPegawai: string;
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^Rp\.\d{1,3}(,\d{3})*$/, {
-    message: 'hargaMenu harus dalam format Rp.1.000.000',
-  })
-  hargaMenu: string;
+  noHpPegawai: string;
 
-  @IsOptional()
   @IsString()
-  gambarMenu?: string;
+  @IsNotEmpty()
+  statusPegawai: string;
 }
