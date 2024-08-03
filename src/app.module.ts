@@ -6,6 +6,7 @@ import { MenuModule } from './menu/menu.module';
 import { Menu } from './menu/menu.entity';
 import { PegawaiController } from './pegawai/pegawai.controller';
 import { PegawaiModule } from './pegawai/pegawai.module';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -18,6 +19,9 @@ import { PegawaiModule } from './pegawai/pegawai.module';
       database: 'seruni_database',
       entities: [Menu],
       synchronize: true,
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {},
     }),
     MenuModule,
     PegawaiModule,

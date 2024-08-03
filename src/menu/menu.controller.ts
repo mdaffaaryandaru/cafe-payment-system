@@ -8,11 +8,14 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Logger } from 'nestjs-pino';
 import { CreateMenuDto } from './dto/create-menu.dto';
+import { Response } from 'express'; // Pastikan impor dari 'express'
 import { MenuService } from './menu.service';
 import { Menu } from './menu.entity';
 import {
@@ -22,10 +25,14 @@ import {
   ApiConsumes,
 } from '@nestjs/swagger';
 import { UpdateMenuDto } from './dto/update-menu';
+import { join } from 'path';
 
 @Controller('menu')
 export class MenuController {
-  constructor(private readonly menuService: MenuService) {}
+  constructor(
+    private readonly menuService: MenuService,
+    private readonly logger: Logger,
+  ) {}
 
   @Post('create-menu')
   @ApiOperation({ summary: 'Create a new menu item' })
@@ -35,39 +42,37 @@ export class MenuController {
     type: Menu,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'The menu item to create',
     type: CreateMenuDto,
-    examples: {
-      example1: {
-        summary: 'Example menu item',
-        description: 'An example of a menu item to be created',
-        value: {
-          namaMenu: 'Nasi Goreng',
-          stokMenu: 10,
-          kategoriMenu: 'Makanan',
-          hargaMenu: '15000',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        namaMenu: { type: 'string', example: 'Nasi Goreng' },
+        kategoriMenu: { type: 'string', example: 'Makanan' },
+        stokMenu: { type: 'number', example: 10 },
+        hargaMenu: { type: 'string', example: '15000' },
+        gambarMenu: {
+          type: 'string',
+          format: 'binary',
         },
       },
     },
   })
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(
-    FileInterceptor('gambarMenu', {
-      limits: { fileSize: 10 * 1024 * 1024 }, // Set file size limit if needed
-    }),
-  )
+  @UseInterceptors(FileInterceptor('gambarMenu'))
   async createMenu(
+    @UploadedFile() gambarMenu,
     @Body() createMenuDto: CreateMenuDto,
-    @UploadedFile() file: Express.Multer.File,
   ): Promise<Menu> {
-    console.log('Endpoint hit'); // Log pertama
+    this.logger.log('Endpoint hit'); // Log pertama
     try {
-      if (file) {
-        createMenuDto.gambarMenu = file.filename;
-        console.log('File received:', file); // Log kedua
+      if (gambarMenu) {
+        this.logger.log(`File received: ${gambarMenu.originalname}`); // Log kedua
+        createMenuDto.gambarMenu = gambarMenu.filename;
       } else {
-        console.log('No file received'); // Log ketiga
+        this.logger.log('No file received'); // Log ketiga
       }
       // Validasi tambahan jika diperlukan
       if (
@@ -80,9 +85,72 @@ export class MenuController {
       }
       return await this.menuService.createMenu(createMenuDto);
     } catch (error) {
-      console.error('Error creating menu:', error); // Log keempat
+      this.logger.error('Error creating menu:', error); // Log keempat
       throw new BadRequestException('Error creating menu');
     }
+  }
+
+  @Put('edit-menu/:id')
+  @ApiOperation({ summary: 'Edit an existing menu item' })
+  @ApiResponse({
+    status: 200,
+    description: 'The menu item has been successfully updated.',
+    type: Menu,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'The menu item to update',
+    type: UpdateMenuDto,
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        namaMenu: { type: 'string', example: 'Nasi Goreng' },
+        kategoriMenu: { type: 'string', example: 'Makanan' },
+        stokMenu: { type: 'number', example: 10 },
+        hargaMenu: { type: 'string', example: '15000' },
+        gambarMenu: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('gambarMenu'))
+  async editMenu(
+    @Param('id') id: number,
+    @UploadedFile() gambarMenu,
+    @Body() updateMenuDto: UpdateMenuDto,
+  ): Promise<Menu> {
+    this.logger.log('Endpoint hit'); // Log pertama
+    try {
+      if (gambarMenu) {
+        this.logger.log(`File received: ${gambarMenu.originalname}`); // Log kedua
+        updateMenuDto.gambarMenu = gambarMenu.filename;
+      } else {
+        this.logger.log('No file received'); // Log ketiga
+      }
+      // Validasi tambahan jika diperlukan
+      if (
+        !updateMenuDto.namaMenu ||
+        !updateMenuDto.stokMenu ||
+        !updateMenuDto.kategoriMenu ||
+        !updateMenuDto.hargaMenu
+      ) {
+        throw new BadRequestException('Missing required fields');
+      }
+      return await this.menuService.updateMenu(id, updateMenuDto);
+    } catch (error) {
+      this.logger.error('Error updating menu:', error); // Log keempat
+      throw new BadRequestException('Error updating menu');
+    }
+  }
+
+  @Get('images/:imageName')
+  getImage(@Param('imageName') imageName: string, @Res() res: Response) {
+    const imagePath = join(__dirname, '..', '..', 'files', imageName);
+    return res.sendFile(imagePath);
   }
 
   @Get()
@@ -95,38 +163,6 @@ export class MenuController {
   @ApiResponse({ status: 404, description: 'Menu not found.' })
   findAllMenu(): Promise<Menu[]> {
     return this.menuService.findAllMenu();
-  }
-
-  @Put('edit-menu/:id')
-  @ApiOperation({ summary: 'Update an existing menu item' })
-  @ApiResponse({
-    status: 201,
-    description: 'The menu item has been successfully updated.',
-    type: Menu,
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  @ApiResponse({ status: 404, description: 'Menu item not found.' })
-  @ApiBody({
-    description: 'The menu item to update',
-    type: UpdateMenuDto,
-    examples: {
-      example1: {
-        summary: 'Example menu item update',
-        description: 'An example of a menu item to be updated',
-        value: {
-          namaMenu: 'Nasi Goreng Updated',
-          stokMenu: 15,
-          kategoriMenu: 'Makanan',
-          hargaMenu: '20000',
-        },
-      },
-    },
-  })
-  async updateMenu(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateMenuDto: UpdateMenuDto,
-  ): Promise<Menu> {
-    return this.menuService.updateMenu(id, updateMenuDto);
   }
 
   @Delete('delete-menu/:id')
