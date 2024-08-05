@@ -6,7 +6,7 @@ import {
   IsOptional,
 } from 'class-validator';
 
-export class CreateMenuDto {
+export class CreatePegawaiDto {
   // make example for dto menu
   @IsString()
   @IsNotEmpty()
