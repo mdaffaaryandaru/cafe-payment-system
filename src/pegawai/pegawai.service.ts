@@ -1,4 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreatePegawaiDto } from './dto/create-pegawai.dto';
+import { Pegawai } from './pegawai.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class PegawaiService {}
+export class PegawaiService {
+  constructor(
+    @InjectRepository(Pegawai)
+    private pegawaiRepository: Repository<Pegawai>,
+  ) {}
+
+  async createPegawai(createPegawaiDto: CreatePegawaiDto): Promise<Pegawai> {
+    try {
+      const pegawai = this.pegawaiRepository.create(createPegawaiDto);
+      return await this.pegawaiRepository.save(pegawai);
+    } catch (error) {
+      console.error('Error in createPegawai service method:', error);
+      throw new BadRequestException('Error saving pegawai');
+    }
+  }
+}

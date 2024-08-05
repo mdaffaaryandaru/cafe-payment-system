@@ -7,6 +7,7 @@ import { Menu } from './menu/menu.entity';
 import { PegawaiController } from './pegawai/pegawai.controller';
 import { PegawaiModule } from './pegawai/pegawai.module';
 import { LoggerModule } from 'nestjs-pino';
+import { Pegawai } from './pegawai/pegawai.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { LoggerModule } from 'nestjs-pino';
       username: 'root',
       password: '',
       database: 'seruni_database',
-      entities: [Menu],
+      entities: [Menu, Pegawai],
       synchronize: true,
     }),
     LoggerModule.forRoot({
@@ -26,7 +27,7 @@ import { LoggerModule } from 'nestjs-pino';
     MenuModule,
     PegawaiModule,
   ],
-  controllers: [AppController, PegawaiController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

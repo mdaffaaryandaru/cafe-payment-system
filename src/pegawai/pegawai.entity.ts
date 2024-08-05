@@ -16,6 +16,4 @@ export class Pegawai {
 
   @Column()
   statusPegawai: string;
-
-
 }
