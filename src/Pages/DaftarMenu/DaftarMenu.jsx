@@ -5,7 +5,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/MockData";
 import Header from "../../Components/Header";
-import { post, get, put, del } from "../../utils/api";
+import { post, get, put, del, postWithFile, putWithImage } from "../../utils/api";
 import ModalInputMenu from "../../Components/Modal/ModalInputMenu";
 import ModalEditMenu from "../../Components/Modal/ModalEditMenu";
 
@@ -16,6 +16,7 @@ const DaftarMenu = () => {
   const [dataMenu, setDataMenu] = React.useState([])
   //set data form input
   const [formData, setFormData] = React.useState({
+    gambarMenu: {},
     namaMenu: '',
     stokMenu: '',
     kategoriMenu: '',
@@ -23,6 +24,7 @@ const DaftarMenu = () => {
   });
   
   const [formDataEdit, setFormDataEdit] = React.useState({
+    gambarMenu: {},
     namaMenu: '',
     stokMenu: '',
     kategoriMenu: '',
@@ -44,12 +46,25 @@ const DaftarMenu = () => {
     fetchItems()
   }, [])
 
+  React.useEffect(() => {
+    console.log(formData)
+  }, [formData])
+
   // POST data
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const newFormData = new FormData();
+
+    newFormData.append('gambarMenu', formData.gambarMenu)
+    newFormData.append('namaMenu', formData.namaMenu)
+    newFormData.append('stokMenu', formData.stokMenu)
+    newFormData.append('kategoriMenu', formData.kategoriMenu)
+    newFormData.append('hargaMenu', formData.hargaMenu)
+
     try {
-      const response = await post('/menu/create-menu', formData)
+      // const response = await post('/menu/create-menu', newFormData)
+      const response = await postWithFile('/menu/create-menu', newFormData)
       console.log(response)
     } catch (error) {
       console.log(error)
@@ -70,8 +85,17 @@ const DaftarMenu = () => {
   // PUT data menu
   const handleEdit = async (e, id) => {
     e.preventDefault()
+
+    const newFormData = new FormData()
+
+    newFormData.append('gambarMenu', formDataEdit.gambarMenu)
+    newFormData.append('namaMenu', formDataEdit.namaMenu)
+    newFormData.append('stokMenu', formDataEdit.stokMenu)
+    newFormData.append('kategoriMenu', formDataEdit.kategoriMenu)
+    newFormData.append('hargaMenu', formDataEdit.hargaMenu)
+
     try {
-      await put(`/menu/edit-menu/${id}`, formDataEdit);
+      await putWithImage(`/menu/edit-menu/${id}`, newFormData);
     } catch (error) {
       console.error('Error deleting item:', error);
     }

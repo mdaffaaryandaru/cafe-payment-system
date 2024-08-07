@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://192.168.18.217:3000',
+  baseURL: 'http://10.10.10.205:3000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -25,9 +25,35 @@ export const post = async (url, data) => {
   }
 }
 
+export const postWithFile = async (url, data) => {
+  try {
+    const response = await api.post(url, data, {
+      headers: {
+        'Content-Type' : 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const put = async (url, data) => {
   try {
     const response = await api.put(url, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const putWithImage = async (url, data) => {
+  try {
+    const response = await api.put(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response.data;
   } catch (error) {
     throw error;

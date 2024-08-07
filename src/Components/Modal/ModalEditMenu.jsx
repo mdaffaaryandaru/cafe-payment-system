@@ -1,30 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, Box, Modal, Button, TextField, InputLabel, MenuItem, FormControl, Select, IconButton } from "@mui/material";
 import { Edit as EditIcon} from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const styleModal = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
 const ModalEditMenu = ({setDataForm, dataItem, handleOnSubmit }) => {
   // for open modal add
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(dataItem)
 
-  const handleOnChange = (e) => {
-    const { name, value, type } = e.target
+  const [filename, setFilename] = useState({})
 
+  const handleOnChange = (e) => {
+    const { name, value, type, files } = e.target
+
+    if(type === 'file') {
+      setFilename(files[0])
+    }
     setData({
       ...data,
-      [name]: type === 'number' ? Number(value) : value,
+      [name]: type === 'number' ? Number(value) : type === 'file' ? files[0] : value,
     });
   }
 
@@ -61,6 +80,18 @@ const ModalEditMenu = ({setDataForm, dataItem, handleOnSubmit }) => {
               autoComplete="off"
               onSubmit={handleSubmit}
           >
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
+                color="secondary"
+              >
+                Upload file
+                <VisuallyHiddenInput type="file" onChange={handleOnChange} name='gambarMenu'/>
+              </Button>
+              <p>{filename.name ?? data.gambarMenu}</p>
               <TextField
               required
               id="outlined-required"
