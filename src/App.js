@@ -3,8 +3,6 @@ import Topbar from "./Pages/Global/Topbar";
 import Sidebar from "./Pages/Global/Sidebar";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Team from "./Pages/Team/Team";
-import Invoices from "./Pages/Invoice/Invoice";
-import Contact from "./Pages/DaftarMenu/DaftarMenu";
 // import Bar from "./scenes/bar";
 import Form from "./Pages/Form/Form";
 // import Line from "./scenes/line";
@@ -14,6 +12,7 @@ import Form from "./Pages/Form/Form";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import OrderPage from "./Pages/OrderPage/OrderPage";
+import DaftarMenu from "./Pages/DaftarMenu/DaftarMenu";
 // import Calendar from "./scenes/calendar/calendar";
 
 function App() {
@@ -32,8 +31,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
-              <Route path="/daftar-menu" element={<Contact />} />
-              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/daftar-menu" element={<DaftarMenu />} />
+              {/* <Route path="/invoices" element={<Invoices />} /> */}
+              <Route path="/order/:noMeja" element={<OrderPage />} />
               {/* <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />

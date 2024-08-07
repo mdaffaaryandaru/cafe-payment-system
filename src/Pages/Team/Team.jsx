@@ -2,7 +2,6 @@ import { Typography, Box, useTheme, Modal, Button } from "@mui/material";
 import * as React from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../Data/MockData";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
@@ -132,7 +131,7 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid rows={mockDataTeam} columns={columns} />
+        {/* <DataGrid rows={mockDataTeam} columns={columns} /> */}
       </Box>
     </Box>
   );
