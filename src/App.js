@@ -6,7 +6,7 @@ import Team from "./Pages/Team/Team";
 import Invoices from "./Pages/Invoice/Invoice";
 import Contact from "./Pages/DaftarMenu/DaftarMenu";
 // import Bar from "./scenes/bar";
-// import Form from "./scenes/form";
+import Form from "./Pages/Form/Form";
 // import Line from "./scenes/line";
 // import Pie from "./scenes/pie";
 // import FAQ from "./scenes/faq";
@@ -34,9 +34,13 @@ function App() {
               <Route path="/team" element={<Team />} />
               <Route path="/daftar-menu" element={<Contact />} />
               <Route path="/invoices" element={<Invoices />} />
-
-              {/* order page client */}
-              <Route path="/order/:noMeja" element={<OrderPage/>}/>
+              {/* <Route path="/form" element={<Form />} />
+              <Route path="/bar" element={<Bar />} />
+              <Route path="/pie" element={<Pie />} />
+              <Route path="/line" element={<Line />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/geography" element={<Geography />} /> */}
             </Routes>
           </main>
         </div>
