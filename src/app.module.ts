@@ -8,6 +8,9 @@ import { PegawaiController } from './pegawai/pegawai.controller';
 import { PegawaiModule } from './pegawai/pegawai.module';
 import { LoggerModule } from 'nestjs-pino';
 import { Pegawai } from './pegawai/pegawai.entity';
+import { OrderModule } from './order/order.module';
+import { Order } from './order/order.entity';
+import { DetailOrderan } from './order/detail-orderan.entity';
 
 @Module({
   imports: [
@@ -18,7 +21,7 @@ import { Pegawai } from './pegawai/pegawai.entity';
       username: 'root',
       password: '',
       database: 'seruni_database',
-      entities: [Menu, Pegawai],
+      entities: [Menu, Pegawai, Order, DetailOrderan],
       synchronize: true,
     }),
     LoggerModule.forRoot({
@@ -26,6 +29,7 @@ import { Pegawai } from './pegawai/pegawai.entity';
     }),
     MenuModule,
     PegawaiModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -42,4 +42,17 @@ export class PegawaiService {
       throw new BadRequestException('Error updating pegawai');
     }
   }
+
+  findAllPegawai(): Promise<Pegawai[]> {
+    return this.pegawaiRepository.find();
+  }
+
+  deletePegawai = async (id: number): Promise<void> => {
+    const pegawai = await this.pegawaiRepository.findOne({ where: { id } });
+    if (!pegawai) {
+      throw new NotFoundException(`Pegawai with ID ${id} not found`);
+    }
+
+    await this.pegawaiRepository.delete(id);
+  };
 }

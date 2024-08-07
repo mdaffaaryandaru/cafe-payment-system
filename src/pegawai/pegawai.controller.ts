@@ -5,6 +5,9 @@ import {
   BadRequestException,
   Param,
   Put,
+  Get,
+  Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PegawaiService } from './pegawai.service';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -100,5 +103,28 @@ export class PegawaiController {
       console.error('Error updating pegawai:', error);
       throw new BadRequestException('Error updating pegawai');
     }
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all pegawai items' })
+  @ApiResponse({
+    status: 200,
+    description: 'All pegawai',
+    type: [Pegawai],
+  })
+  @ApiResponse({ status: 404, description: 'Menu not found.' })
+  findAllMenu(): Promise<Pegawai[]> {
+    return this.pegawaiService.findAllPegawai();
+  }
+
+  @Delete('delete-pegawai/:id')
+  @ApiOperation({ summary: 'delete existing id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The menu item has been successfully deleted.',
+  })
+  @ApiResponse({ status: 404, description: 'Pegawai not found.' })
+  async deletePegawai(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.pegawaiService.deletePegawai(id);
   }
 }
