@@ -38,6 +38,28 @@
   }
 }
 
+html,
+body,
+#root,
+.app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+}
+
+.sidebar {
+  height: 100%;
+}
+
+.content {
+  flex-grow: 1;
+  overflow: auto;
+}
+
 /** CSS untuk global */
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 
