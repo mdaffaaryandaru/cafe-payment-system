@@ -14,8 +14,16 @@ export class OrderService {
     private readonly detailOrderanRepository: Repository<DetailOrderan>,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+  async create(
+    createOrderDto: CreateOrderDto,
+    gambarTransaksi: Express.Multer.File,
+  ): Promise<Order> {
     const { orderan, ...orderData } = createOrderDto;
+
+    if (gambarTransaksi) {
+      // Example: save the file path or URL to the orderData
+      orderData.gambarTransaksi = gambarTransaksi.filename; // Adjust based on your storage solution
+    }
 
     // Create the order entity
     const order = this.orderRepository.create(orderData);

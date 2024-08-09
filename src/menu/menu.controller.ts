@@ -13,7 +13,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Logger } from 'nestjs-pino';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { Response } from 'express'; // Pastikan impor dari 'express'
 import { MenuService } from './menu.service';
@@ -31,7 +30,6 @@ import { join } from 'path';
 export class MenuController {
   constructor(
     private readonly menuService: MenuService,
-    private readonly logger: Logger,
   ) {}
 
   @Post('create-menu')
@@ -66,15 +64,10 @@ export class MenuController {
     @UploadedFile() gambarMenu,
     @Body() createMenuDto: CreateMenuDto,
   ): Promise<Menu> {
-    this.logger.log('Endpoint hit'); // Log pertama
     try {
       if (gambarMenu) {
-        this.logger.log(`File received: ${gambarMenu.originalname}`); // Log kedua
         createMenuDto.gambarMenu = gambarMenu.filename;
-      } else {
-        this.logger.log('No file received'); // Log ketiga
-      }
-      // Validasi tambahan jika diperlukan
+      } 
       if (
         !createMenuDto.namaMenu ||
         !createMenuDto.stokMenu ||
@@ -85,7 +78,6 @@ export class MenuController {
       }
       return await this.menuService.createMenu(createMenuDto);
     } catch (error) {
-      this.logger.error('Error creating menu:', error); // Log keempat
       throw new BadRequestException('Error creating menu');
     }
   }
@@ -123,14 +115,10 @@ export class MenuController {
     @UploadedFile() gambarMenu,
     @Body() updateMenuDto: UpdateMenuDto,
   ): Promise<Menu> {
-    this.logger.log('Endpoint hit'); // Log pertama
     try {
       if (gambarMenu) {
-        this.logger.log(`File received: ${gambarMenu.originalname}`); // Log kedua
         updateMenuDto.gambarMenu = gambarMenu.filename;
-      } else {
-        this.logger.log('No file received'); // Log ketiga
-      }
+      } 
       // Validasi tambahan jika diperlukan
       if (
         !updateMenuDto.namaMenu ||
@@ -142,7 +130,6 @@ export class MenuController {
       }
       return await this.menuService.updateMenu(id, updateMenuDto);
     } catch (error) {
-      this.logger.error('Error updating menu:', error); // Log keempat
       throw new BadRequestException('Error updating menu');
     }
   }

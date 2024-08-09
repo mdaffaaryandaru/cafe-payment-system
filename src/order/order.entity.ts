@@ -25,4 +25,7 @@ export class Order {
 
   @Column()
   totalHarga: number;
+
+  @Column({ nullable: true })
+  gambarTransaksi: string;
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,11 +6,13 @@ import { MenuModule } from './menu/menu.module';
 import { Menu } from './menu/menu.entity';
 import { PegawaiController } from './pegawai/pegawai.controller';
 import { PegawaiModule } from './pegawai/pegawai.module';
-import { LoggerModule } from 'nestjs-pino';
 import { Pegawai } from './pegawai/pegawai.entity';
 import { OrderModule } from './order/order.module';
 import { Order } from './order/order.entity';
 import { DetailOrderan } from './order/detail-orderan.entity';
+// import { WebSocketGatewayService } from './websocket.gateway';
+import { AppGateway } from './app.gateway';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -24,14 +26,12 @@ import { DetailOrderan } from './order/detail-orderan.entity';
       entities: [Menu, Pegawai, Order, DetailOrderan],
       synchronize: true,
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {},
-    }),
     MenuModule,
     PegawaiModule,
     OrderModule,
+    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
 export class AppModule {}
