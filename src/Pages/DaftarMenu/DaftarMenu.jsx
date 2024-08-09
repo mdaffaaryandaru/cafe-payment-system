@@ -3,7 +3,6 @@ import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import * as React from 'react';
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/MockData";
 import Header from "../../Components/Header";
 import { post, get, put, del, postWithFile, putWithImage } from "../../utils/api";
 import ModalInputMenu from "../../Components/Modal/ModalInputMenu";
