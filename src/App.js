@@ -13,6 +13,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import OrderPage from "./Pages/OrderPage/OrderPage";
 import DaftarMenu from "./Pages/DaftarMenu/DaftarMenu";
+import PaymentPage from "./Pages/Payment/PaymentPage";
 // import Calendar from "./scenes/calendar/calendar";
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
               <Route path="/daftar-menu" element={<DaftarMenu />} />
-              {/* <Route path="/invoices" element={<Invoices />} /> */}
+              <Route path="/order/pembayaran" element={<PaymentPage />} />
               <Route path="/order/:noMeja" element={<OrderPage />} />
               {/* <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />

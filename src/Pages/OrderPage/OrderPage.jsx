@@ -1,16 +1,38 @@
 import { Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { ShoppingCart, CirclePlus, Plus, Minus } from 'lucide-react';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { get } from "../../utils/api";
 
 const OrderPage = () => {
+  const navigate = useNavigate()
+
   const { noMeja } = useParams()
   const [ openSidebar, setOpenSidebar ] = useState(false)
 
-  const [dataMenu, setDataMenu] = useState([])
+  const totalHargaRef = useRef(null)
 
+  const [dataMenu, setDataMenu] = useState([])
   const [cart, setCart] = useState([])
+
+  const [storeDataOrder, setStoreDataOrder] = useState(
+    {
+      "noMeja": Number(noMeja),
+      "namaPelanggan": '',
+      "statusPesanan": '',
+      "jenisPembayaran": '',
+      "orderan": [],
+      "totalHarga": ''
+    }
+  )
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target
+
+    setStoreDataOrder({
+      ...storeDataOrder, [name]: value
+    })
+  }
 
   const fetchMenu = async() => {
     try {
@@ -24,6 +46,23 @@ const OrderPage = () => {
   useEffect(() => {
     fetchMenu()
   }, [])
+
+  useEffect(() => {
+    if (dataMenu.length != 0) {  // Pastikan dataMenu tidak null
+      console.log('test');
+      console.log(dataMenu);
+      
+      const storedData = localStorage.getItem('order');
+      if (storedData) {
+        try {
+          const orderJson = JSON.parse(storedData)
+          setCart(orderJson.orderan)
+        } catch (e) {
+          console.error('Error parsing JSON from localStorage:', e);
+        }
+      }
+    }
+  }, [dataMenu])
 
   const groupByCategory = () => {
     const grouped = dataMenu.reduce((acc, menu) => {
@@ -96,12 +135,21 @@ const OrderPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    console.log(cart)
+    const updateStoreOrder = {
+      ...storeDataOrder, 
+      orderan: cart,
+      totalHarga: cart.reduce((total, item) => total + item.harga, 0)
+    }
+
+    localStorage.setItem('order', JSON.stringify(updateStoreOrder))
+
+    navigate('/order/pembayaran')
+
   }
 
   useEffect(() => {
-    console.log(groupByCategory())
-  }, [dataMenu])
+    console.log(storeDataOrder)
+  }, [storeDataOrder])
 
   return (
     <main className="">
@@ -125,7 +173,7 @@ const OrderPage = () => {
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xl:gap-5 justify-center">
                   {categoryMenu.menu.map((menu, x) => (
                     <div key={x} className="flex gap-2 bg-slate-800 p-3 rounded">
-                      <img className=" aspect-square object-cover w-20 h-20 rounded" src={`http://10.10.10.205:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu}/>
+                      <img className=" aspect-square object-cover w-20 h-20 rounded" src={`http://10.10.10.46:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu}/>
                       <div className="w-full flex justify-between items-center">
                         <div className="flex flex-col">
                           <h4 className="text-xl font-bold">{menu.namaMenu}</h4>
@@ -150,7 +198,7 @@ const OrderPage = () => {
               <div className="grid grid-cols-[1.5fr_1fr] gap-5">
                 <label className="w-full flex flex-col gap-2">
                   <span>Nama</span>
-                  <input type="text" name="nama_pelanggan" id="nama_pelanggan" className="py-2 px-3 outline-none rounded bg-slate-800" required/>
+                  <input onChange={handleOnChange} type="text" name="namaPelanggan" id="namaPelanggan" className="py-2 px-3 outline-none rounded bg-slate-800" required/>
                 </label>
                 <div className="bg-slate-800 p-3 rounded text-center flex justify-center items-center gap-4">
                   <p className="text-base">No. Meja</p>
@@ -159,11 +207,14 @@ const OrderPage = () => {
               </div>
               <div className="flex flex-col gap-2 py-8">
                 {cart.map((item, i) => {
+                  console.log(item)
+                  console.log(dataMenu)
                   const menu = dataMenu.find((menu) => menu.id === item.id_menu)
+                  console.log(menu)
                   console.log(Number(item.harga))
                   return (
                     <div key={i} className="w-full flex gap-6 justify-center items-center bg-slate-800 py-1 px-3 rounded">
-                      <img className="w-16 h-16 aspect-square object-cover" src={`http://10.10.10.205:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
+                      <img className="w-16 h-16 aspect-square object-cover" src={`http://10.10.10.46:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
                       <div className="flex flex-col w-full h-full">
                         <div className="h-full flex justify-between items-center">
                           <div>
@@ -195,8 +246,31 @@ const OrderPage = () => {
                 })}
                 <div className="flex justify-between text-lg font-bold py-3">
                   <h3>Total Harga</h3>
-                  <h3>{getTotalPrice()}</h3>
+                  <h3 ref={totalHargaRef}>{getTotalPrice()}</h3>
                 </div>
+                {/* <div>
+                    <h3>Pilih Satu:</h3>
+                    <div>
+                        <input
+                            type="radio"
+                            id="transferBCA"
+                            name="jenisPembayaran"
+                            value="Transfer BCA"
+                            onChange={handleOnChange}
+                        />
+                        <label htmlFor="option1">Transfer BCA</label>
+                    </div>
+                    <div>
+                        <input
+                            type="radio"
+                            id="VA"
+                            name="jenisPembayaran"
+                            value="VA Account"
+                            onChange={handleOnChange}
+                        />
+                        <label htmlFor="option2">VA Account</label>
+                    </div>
+                </div> */}
                 <button className={`w-full py-2 text-black font-bold text-lg rounded ${cart < 1 ? 'bg-slate-100' : 'bg-lime-300'}`} disabled={cart < 1}>Pesan Menu</button>
               </div>
             </form>
