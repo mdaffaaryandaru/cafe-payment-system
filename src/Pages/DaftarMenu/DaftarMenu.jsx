@@ -1,10 +1,29 @@
-import { Typography, Box, useTheme, Modal, Button, TextField, InputLabel, MenuItem, FormControl, Select, IconButton } from "@mui/material";
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import * as React from 'react';
+import {
+  Typography,
+  Box,
+  useTheme,
+  Modal,
+  Button,
+  TextField,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  IconButton,
+} from "@mui/material";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import * as React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "../../Components/Header";
-import { post, get, put, del, postWithFile, putWithImage } from "../../utils/api";
+import {
+  post,
+  get,
+  put,
+  del,
+  postWithFile,
+  putWithImage,
+} from "../../utils/api";
 import ModalInputMenu from "../../Components/Modal/ModalInputMenu";
 import ModalEditMenu from "../../Components/Modal/ModalEditMenu";
 
@@ -12,107 +31,107 @@ const DaftarMenu = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   // state Data Dummmy
-  const [dataMenu, setDataMenu] = React.useState([])
+  const [dataMenu, setDataMenu] = React.useState([]);
   //set data form input
   const [formData, setFormData] = React.useState({
     gambarMenu: {},
-    namaMenu: '',
-    stokMenu: '',
-    kategoriMenu: '',
-    hargaMenu: '',
+    namaMenu: "",
+    stokMenu: "",
+    kategoriMenu: "",
+    hargaMenu: "",
   });
-  
+
   const [formDataEdit, setFormDataEdit] = React.useState({
     gambarMenu: {},
-    namaMenu: '',
-    stokMenu: '',
-    kategoriMenu: '',
-    hargaMenu: '',
+    namaMenu: "",
+    stokMenu: "",
+    kategoriMenu: "",
+    hargaMenu: "",
   });
 
   // GET all data
   const fetchItems = async () => {
     try {
-      const data = await get('/menu');
-      console.log(data)
+      const data = await get("/menu");
+      console.log(data);
       setDataMenu(data);
     } catch (error) {
-      console.error('Error fetching items:', error);
+      console.error("Error fetching items:", error);
     }
   };
 
   React.useEffect(() => {
-    fetchItems()
-  }, [])
+    fetchItems();
+  }, []);
 
   React.useEffect(() => {
-    console.log(formData)
-  }, [formData])
+    console.log(formData);
+  }, [formData]);
 
   // POST data
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const newFormData = new FormData();
 
-    newFormData.append('gambarMenu', formData.gambarMenu)
-    newFormData.append('namaMenu', formData.namaMenu)
-    newFormData.append('stokMenu', formData.stokMenu)
-    newFormData.append('kategoriMenu', formData.kategoriMenu)
-    newFormData.append('hargaMenu', formData.hargaMenu)
+    newFormData.append("gambarMenu", formData.gambarMenu);
+    newFormData.append("namaMenu", formData.namaMenu);
+    newFormData.append("stokMenu", formData.stokMenu);
+    newFormData.append("kategoriMenu", formData.kategoriMenu);
+    newFormData.append("hargaMenu", formData.hargaMenu);
 
     try {
       // const response = await post('/menu/create-menu', newFormData)
-      const response = await postWithFile('/menu/create-menu', newFormData)
-      console.log(response)
+      const response = await postWithFile("/menu/create-menu", newFormData);
+      console.log(response);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    fetchItems()
-  }
+    fetchItems();
+  };
 
   // DELETE data menu
   const handleDelete = async (id) => {
     try {
       await del(`/menu/delete-menu/${id}`);
     } catch (error) {
-      console.error('Error deleting item:', error);
+      console.error("Error deleting item:", error);
     }
-    fetchItems()
-  }
+    fetchItems();
+  };
 
   // PUT data menu
   const handleEdit = async (e, id) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const newFormData = new FormData()
+    const newFormData = new FormData();
 
-    newFormData.append('gambarMenu', formDataEdit.gambarMenu)
-    newFormData.append('namaMenu', formDataEdit.namaMenu)
-    newFormData.append('stokMenu', formDataEdit.stokMenu)
-    newFormData.append('kategoriMenu', formDataEdit.kategoriMenu)
-    newFormData.append('hargaMenu', formDataEdit.hargaMenu)
+    newFormData.append("gambarMenu", formDataEdit.gambarMenu);
+    newFormData.append("namaMenu", formDataEdit.namaMenu);
+    newFormData.append("stokMenu", formDataEdit.stokMenu);
+    newFormData.append("kategoriMenu", formDataEdit.kategoriMenu);
+    newFormData.append("hargaMenu", formDataEdit.hargaMenu);
 
     try {
       await putWithImage(`/menu/edit-menu/${id}`, newFormData);
     } catch (error) {
-      console.error('Error deleting item:', error);
+      console.error("Error deleting item:", error);
     }
-    fetchItems()
-  }
+    fetchItems();
+  };
 
   const handleSelectionModelChange = (newSelection) => {
-    console.log(newSelection)
-  }
+    console.log(newSelection);
+  };
 
   const columns = [
-    { 
-      field: "id", 
+    {
+      field: "id",
       headerName: "ID",
       flex: 0.5,
     },
-    { 
-      field: "namaMenu", 
+    {
+      field: "namaMenu",
       headerName: "Nama Menu",
       flex: 1,
     },
@@ -140,12 +159,16 @@ const DaftarMenu = () => {
       flex: 1,
     },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      headerName: "Actions",
       flex: 0.5,
       renderCell: (params) => (
         <div>
-          <ModalEditMenu dataItem={params.row} setDataForm={setFormDataEdit} handleOnSubmit={handleEdit}/>
+          <ModalEditMenu
+            dataItem={params.row}
+            setDataForm={setFormDataEdit}
+            handleOnSubmit={handleEdit}
+          />
           <IconButton onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon />
           </IconButton>
@@ -156,12 +179,13 @@ const DaftarMenu = () => {
 
   return (
     <Box m="20px">
-      <Header
-        title="Daftar Menu"
-        subtitle="List menu makanan dan minuman"
-      />
+      <Header title="Daftar Menu" subtitle="List menu makanan dan minuman" />
       <div>
-        <ModalInputMenu dataForm={formData} setDataForm={setFormData} handleOnSubmit={handleSubmit}/>
+        <ModalInputMenu
+          dataForm={formData}
+          setDataForm={setFormData}
+          handleOnSubmit={handleSubmit}
+        />
       </div>
       <Box
         m="40px 0 0 0"

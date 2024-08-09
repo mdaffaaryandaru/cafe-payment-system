@@ -1,20 +1,38 @@
-import { Typography, Box, useTheme, Modal, Button } from "@mui/material";
-import * as React from 'react';
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  Typography,
+  Box,
+  useTheme,
+  Modal,
+  Button,
+  IconButton,
+} from "@mui/material";
+import * as React from "react";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../Components/Header";
+import {
+  post,
+  get,
+  put,
+  del,
+  postWithFile,
+  putWithImage,
+} from "../../utils/api";
+import ModalEditPegawai from "./Modal/ModalEditPegawai";
+import ModalInputPegawai from "./Modal/ModalInputPegawai";
 
 const styleModal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -24,6 +42,84 @@ const Team = () => {
   const colors = tokens(theme.palette.mode);
   // for open modal add
   const [open, setOpen] = React.useState(false);
+  const [dataPegawai, setDataPegawai] = React.useState([]);
+  const [formData, setFormData] = React.useState({
+    namaPegawai: "",
+    alamatPegawai: "",
+    noHpPegawai: "",
+    statusPegawai: "",
+  });
+  const [formDataEdit, setFormDataEdit] = React.useState({
+    namaPegawai: "",
+    alamatPegawai: "",
+    noHpPegawai: "",
+    statusPegawai: "",
+  });
+
+  const fetchItems = async () => {
+    try {
+      const data = await get("/pegawai");
+      console.log(data);
+      setDataPegawai(data);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
+  };
+  React.useEffect(() => {
+    fetchItems();
+  }, []);
+
+  React.useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newFormData = new FormData();
+
+    newFormData.append("namaPegawai", formData.namaPegawai);
+    newFormData.append("alamatPegawai", formData.alamatPegawai);
+    newFormData.append("noHpPegawai", formData.noHpPegawai);
+    newFormData.append("statusPegawai", formData.statusPegawai);
+
+    try {
+      const response = await post("/pegawai/create-pegawai", newFormData);
+      console.log(response);
+    } catch (error) {
+      console.error("Error submiting data:", error);
+    }
+    fetchItems();
+  };
+
+  // DELETE data menu
+  const handleDelete = async (id) => {
+    try {
+      await del(`/pegawai/delete-pegawai/${id}`);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+    fetchItems();
+  };
+
+  // PUT data menu
+  const handleEdit = async (e, id) => {
+    e.preventDefault();
+
+    const newFormData = new FormData();
+
+    newFormData.append("namaPegawai", formDataEdit.namaPegawai);
+    newFormData.append("alamatPegawai", formDataEdit.alamatPegawai);
+    newFormData.append("noHpPegawai", formDataEdit.noHpPegawai);
+    newFormData.append("statusPegawai", formDataEdit.statusPegawai);
+
+    try {
+      await put(`/pegawai/update-pegawai/${id}`, newFormData);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+    fetchItems();
+  };
 
   const columns = [
     {
@@ -31,79 +127,54 @@ const Team = () => {
       headerName: "ID",
     },
     {
-      field: "name",
-      headerName: "Name",
+      field: "namaPegawai",
+      headerName: "Nama Pegawai",
       flex: 1,
       cellClassName: "name-collumn--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "alamatPegawai",
+      headerName: "Alamat Pegawai",
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "phone",
-      headerName: "Phone",
+      field: "nomorHpPegawai",
+      headerName: "No Hp Pegawai",
       flex: 1,
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "statusPegawai",
+      headerName: "Status Pegawai",
       flex: 1,
     },
     {
-      field: "access",
-      headerName: "Access Level",
-      flex: 1,
-      renderCell: ({ row: { access } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            mt="10px"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
-            </Typography>
-          </Box>
-        );
-      },
+      field: "actions",
+      headerName: "Actions",
+      flex: 0.5,
+      renderCell: (params) => (
+        <div>
+          <ModalEditPegawai
+            dataItem={params.row}
+            setDataForm={setFormDataEdit}
+            handleOnSubmit={handleEdit}
+          />
+          <IconButton onClick={() => handleDelete(params.row.id)}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      ),
     },
   ];
   return (
     <Box m="20px">
       <Header title="TEAM" subtitle="Manage Your Team" />
       <div>
-        <Button variant="contained" color="secondary" onClick={() => setOpen(true)}>Tambah Karyawan</Button>
-        <Modal
-          open={open}
-          onClose={() => setOpen(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={styleModal}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-          </Box>
-        </Modal>
+        <ModalInputPegawai
+          dataForm={formData}
+          setDataForm={setFormData}
+          handleOnSubmit={handleSubmit}
+        />
       </div>
       <Box
         m="40px 0 0 0"
@@ -131,7 +202,11 @@ const Team = () => {
           },
         }}
       >
-        {/* <DataGrid rows={mockDataTeam} columns={columns} /> */}
+        <DataGrid
+          rows={dataPegawai}
+          columns={columns}
+          components={{ Toolbar: GridToolbar }}
+        />
       </Box>
     </Box>
   );

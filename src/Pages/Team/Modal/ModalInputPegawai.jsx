@@ -11,7 +11,6 @@ import {
   Select,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const styleModal = {
   position: "absolute",
@@ -25,32 +24,15 @@ const styleModal = {
   p: 4,
 };
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
-
-const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
+const ModalInputPegawai = ({ dataForm, setDataForm, handleOnSubmit }) => {
   // for open modal add
   const [open, setOpen] = React.useState(false);
-  const [filename, setFilename] = useState({});
 
   const handleOnChange = (e) => {
-    const { name, value, type, files } = e.target;
-    if (type === "file") {
-      setFilename(files[0]);
-    }
+    const { name, value, type } = e.target;
     setDataForm({
       ...dataForm,
-      [name]:
-        type === "number" ? Number(value) : type === "file" ? files[0] : value,
+      [name]: type === "number" ? Number(value) : value,
     });
   };
 
@@ -66,7 +48,7 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
         color="secondary"
         onClick={() => setOpen(true)}
       >
-        Tambah Data Menu
+        Tambah Data Pegawai
       </Button>
       <Modal
         open={open}
@@ -81,70 +63,51 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
             component="h2"
             marginBottom="1rem"
           >
-            Tambah Data Menu
+            Tambah Data Pegawai
           </Typography>
           <Box
             component="form"
-            sx={{
-              "& .MuiTextField-root": { mt: 3, width: "100%" },
-            }}
+            sx={{ "& .MuiTextField-root": { mt: 3, width: "100%" } }}
             autoComplete="off"
             onSubmit={handleSubmit}
           >
-            <Button
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              startIcon={<CloudUploadIcon />}
-              color="secondary"
-            >
-              Upload file
-              <VisuallyHiddenInput
-                type="file"
-                onChange={handleOnChange}
-                name="gambarMenu"
-              />
-            </Button>
-            <p>{filename.name ?? "No file uploaded"}</p>
             <TextField
               required
               id="outlined-required"
-              label="Nama Menu"
+              label="Nama Pegawai"
               color="secondary"
-              name="namaMenu"
+              name="namaPegawai"
               onChange={handleOnChange}
             />
             <TextField
               required
               id="outlined-required"
-              label="Stok"
-              type="number"
+              label="Alamat Pegawai"
               color="secondary"
-              name="stokMenu"
+              name="alamatPegawai"
+              onChange={handleOnChange}
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="No Hp Pegawai"
+              color="secondary"
+              type="number"
+              name="noHpPegawai"
               onChange={handleOnChange}
             />
             <FormControl color="secondary" fullWidth sx={{ mt: 3 }}>
-              <InputLabel>Kategori</InputLabel>
+              <InputLabel>Status Pegawai</InputLabel>
               <Select
-                label="Kategori"
-                name="kategoriMenu"
-                value={dataForm.kategoriMenu}
-                onChange={handleOnChange} // Menggunakan handleChange yang sama
+                label="Status Pegawai"
+                name="statusPegawai"
+                value={dataForm.statusPegawai}
+                onChange={handleOnChange}
               >
-                <MenuItem value="Makanan">Makanan</MenuItem>
-                <MenuItem value="Minuman">Minuman</MenuItem>
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Tidak Active">Tidak Active</MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              required
-              id="outlined-required"
-              label="Harga"
-              type="number"
-              color="secondary"
-              name="hargaMenu"
-              onChange={handleOnChange}
-            />
             <Button
               type="submit"
               variant="contained"
@@ -161,4 +124,4 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
   );
 };
 
-export default ModalInputMenu;
+export default ModalInputPegawai;
