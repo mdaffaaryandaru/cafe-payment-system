@@ -14,12 +14,13 @@ import { ColorModeContext, useMode } from "./theme";
 import OrderPage from "./Pages/OrderPage/OrderPage";
 import DaftarMenu from "./Pages/DaftarMenu/DaftarMenu";
 import PaymentPage from "./Pages/Payment/PaymentPage";
+import OrderanPelanggan from "./Pages/OrderanPelanggan/OrderanPelanggan";
 // import Calendar from "./scenes/calendar/calendar";
 
 function App() {
   const [theme, colorMode] = useMode();
-  const location = useLocation()
-  const isOrderPage = location.pathname.includes('/order')
+  const location = useLocation();
+  const isOrderPage = location.pathname.includes("/order");
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -35,6 +36,10 @@ function App() {
               <Route path="/daftar-menu" element={<DaftarMenu />} />
               <Route path="/order/pembayaran" element={<PaymentPage />} />
               <Route path="/order/:noMeja" element={<OrderPage />} />
+              <Route
+                path="/detail-orderan-pelanggan"
+                element={<OrderanPelanggan />}
+              />
               {/* <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />
