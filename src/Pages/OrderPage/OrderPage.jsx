@@ -173,7 +173,7 @@ const OrderPage = () => {
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xl:gap-5 justify-center">
                   {categoryMenu.menu.map((menu, x) => (
                     <div key={x} className="flex gap-2 bg-slate-800 p-3 rounded">
-                      <img className=" aspect-square object-cover w-20 h-20 rounded" src={`http://10.10.10.46:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu}/>
+                      <img className=" aspect-square object-cover w-20 h-20 rounded" src={`http://localhost:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu}/>
                       <div className="w-full flex justify-between items-center">
                         <div className="flex flex-col">
                           <h4 className="text-xl font-bold">{menu.namaMenu}</h4>
@@ -214,7 +214,7 @@ const OrderPage = () => {
                   console.log(Number(item.harga))
                   return (
                     <div key={i} className="w-full flex gap-6 justify-center items-center bg-slate-800 py-1 px-3 rounded">
-                      <img className="w-16 h-16 aspect-square object-cover" src={`http://10.10.10.46:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
+                      <img className="w-16 h-16 aspect-square object-cover" src={`http://localhost:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
                       <div className="flex flex-col w-full h-full">
                         <div className="h-full flex justify-between items-center">
                           <div>
