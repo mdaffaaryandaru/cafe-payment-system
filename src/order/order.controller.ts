@@ -23,7 +23,7 @@ import {
 import { Order } from './order.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { log } from 'console';
-import { AppGateway } from 'src/app.gateway';
+import { AppGateway } from '../app.gateway';
 
 @Controller('order')
 export class OrderController {
@@ -68,9 +68,15 @@ export class OrderController {
     @Body() createOrderDto: CreateOrderDto,
     @UploadedFile() gambarTransaksi: Express.Multer.File,
   ): Promise<Order> {
+    console.log('Received createOrderDto:', createOrderDto);
+    console.log('Received gambarTransaksi:', gambarTransaksi);
     // Parse orderan if it is a string
     if (typeof createOrderDto.orderan === 'string') {
-      createOrderDto.orderan = JSON.parse(createOrderDto.orderan);
+      try {
+        createOrderDto.orderan = JSON.parse(createOrderDto.orderan);
+      } catch (error) {
+        throw new BadRequestException('Invalid orderan format');
+      }
     }
 
     // Ensure orderan is an array
@@ -82,12 +88,25 @@ export class OrderController {
       createOrderDto,
       gambarTransaksi,
     );
-    this.appGateway.sendOrderNotification(order);
+    const sendWebSocket = this.appGateway.sendOrderNotification(order);
+    console.log('sendWebSocket', sendWebSocket);
     return order;
   }
 
   @Get()
   findAll() {
     return this.orderService.findAllOrder();
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get an order by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'The order has been successfully fetched.',
+    type: Order,
+  })
+  @ApiResponse({ status: 404, description: 'Order not found.' })
+  async findOne(@Param('id') id: number): Promise<Order> {
+    return this.orderService.findOrderById(id);
   }
 }

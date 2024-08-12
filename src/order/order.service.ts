@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Order } from './order.entity';
@@ -61,5 +61,16 @@ export class OrderService {
         totalHarga,
       };
     });
+  }
+
+  async findOrderById(id: number): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['orderan'],
+    });
+    if (!order) {
+      throw new BadRequestException('Order not found');
+    }
+    return order;
   }
 }

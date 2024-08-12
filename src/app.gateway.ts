@@ -26,6 +26,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('message')
   handleMessage(@MessageBody() data: any): WsResponse<any> {
+
     return {
       event: 'message',
       data: { message: 'Hello, world!', received: data },
