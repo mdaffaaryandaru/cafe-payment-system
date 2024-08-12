@@ -14,13 +14,8 @@ import { ColorModeContext, useMode } from "./theme";
 import OrderPage from "./Pages/OrderPage/OrderPage";
 import DaftarMenu from "./Pages/DaftarMenu/DaftarMenu";
 import PaymentPage from "./Pages/Payment/PaymentPage";
-<<<<<<< HEAD
-import OrderDetailCustomer from "./Pages/OrderPage/OrderDetailCustomer";
-
-=======
 import OrderanPelanggan from "./Pages/OrderanPelanggan/OrderanPelanggan";
 // import Calendar from "./scenes/calendar/calendar";
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -41,14 +36,10 @@ function App() {
               <Route path="/daftar-menu" element={<DaftarMenu />} />
               <Route path="/order/pembayaran" element={<PaymentPage />} />
               <Route path="/order/:noMeja" element={<OrderPage />} />
-<<<<<<< HEAD
-              <Route path="/order-tracker/:id/:namaPelanggan" element={<OrderDetailCustomer />} />
-=======
               <Route
                 path="/detail-orderan-pelanggan"
                 element={<OrderanPelanggan />}
               />
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
               {/* <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />

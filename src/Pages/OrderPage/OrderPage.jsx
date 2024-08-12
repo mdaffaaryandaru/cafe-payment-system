@@ -86,11 +86,7 @@ const OrderPage = () => {
 
     if (selectedMenu) {
       setCart((prevCart) => {
-<<<<<<< HEAD
-        const itemIndex = prevCart.findIndex(item => item.menuId === id)
-=======
-        const itemIndex = prevCart.findIndex((item) => item.id_menu === id);
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
+        const itemIndex = prevCart.findIndex((item) => item.menuId === id);
         if (itemIndex > -1) {
           const updatedCart = prevCart.map((item, index) =>
             index === itemIndex
@@ -120,21 +116,15 @@ const OrderPage = () => {
   const handleIncrement = (id) => {
     const selectedMenu = dataMenu.find((menu) => menu.id === id);
 
-<<<<<<< HEAD
-    setCart(prevCart => 
-      prevCart.map(item => 
-        item.menuId === id ? { ...item, jumlah: item.jumlah + 1, harga: (item.jumlah + 1) * selectedMenu.hargaMenu } : item
-=======
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id_menu === id
+        item.menuId === id
           ? {
               ...item,
               jumlah: item.jumlah + 1,
               harga: (item.jumlah + 1) * selectedMenu.hargaMenu,
             }
           : item
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
       )
     );
   };
@@ -142,16 +132,10 @@ const OrderPage = () => {
   const handleDecrement = (id) => {
     const selectedMenu = dataMenu.find((menu) => menu.id === id);
 
-<<<<<<< HEAD
-    setCart(prevCart => 
-      prevCart.map(item => 
-        item.menuId === id ? { ...item, jumlah: item.jumlah - 1, harga: (item.jumlah - 1) * selectedMenu.hargaMenu } : item
-      ).filter(item => item.jumlah > 0)
-=======
     setCart((prevCart) =>
       prevCart
         .map((item) =>
-          item.id_menu === id
+          item.menuId === id
             ? {
                 ...item,
                 jumlah: item.jumlah - 1,
@@ -160,7 +144,6 @@ const OrderPage = () => {
             : item
         )
         .filter((item) => item.jumlah > 0)
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
     );
   };
 
@@ -216,20 +199,15 @@ const OrderPage = () => {
                 </h1>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xl:gap-5 justify-center">
                   {categoryMenu.menu.map((menu, x) => (
-<<<<<<< HEAD
-                    <div key={x} className="flex gap-2 bg-slate-800 p-3 rounded">
-                      <img className=" aspect-square object-cover w-20 h-20 rounded" src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu}/>
-=======
                     <div
                       key={x}
                       className="flex gap-2 bg-slate-800 p-3 rounded"
                     >
                       <img
                         className=" aspect-square object-cover w-20 h-20 rounded"
-                        src={`http://localhost:3000/menu/images/${menu.gambarMenu}`}
+                        src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`}
                         alt={menu.namaMenu}
                       />
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
                       <div className="w-full flex justify-between items-center">
                         <div className="flex flex-col">
                           <h4 className="text-xl font-bold">{menu.namaMenu}</h4>
@@ -284,21 +262,9 @@ const OrderPage = () => {
               </div>
               <div className="flex flex-col gap-2 py-8">
                 {cart.map((item, i) => {
-<<<<<<< HEAD
-                  console.log(item)
-                  console.log(dataMenu)
-                  const menu = dataMenu.find((menu) => menu.id === item.menuId)
-                  console.log(menu)
-                  console.log(Number(item.harga))
-                  return (
-                    <div key={i} className="w-full flex gap-6 justify-center items-center bg-slate-800 py-1 px-3 rounded">
-                      <img className="w-16 h-16 aspect-square object-cover" src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
-=======
                   console.log(item);
                   console.log(dataMenu);
-                  const menu = dataMenu.find(
-                    (menu) => menu.id === item.id_menu
-                  );
+                  const menu = dataMenu.find((menu) => menu.id === item.menuId);
                   console.log(menu);
                   console.log(Number(item.harga));
                   return (
@@ -308,10 +274,9 @@ const OrderPage = () => {
                     >
                       <img
                         className="w-16 h-16 aspect-square object-cover"
-                        src={`http://localhost:3000/menu/images/${menu.gambarMenu}`}
+                        src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`}
                         alt={menu.namaMenu}
                       />
->>>>>>> 88e26dc00bb17ba892e0502ad562a54e5aea0673
                       <div className="flex flex-col w-full h-full">
                         <div className="h-full flex justify-between items-center">
                           <div>

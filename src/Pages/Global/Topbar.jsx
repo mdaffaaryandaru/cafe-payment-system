@@ -16,43 +16,43 @@ const Topbar = () => {
   const colorMode = useContext(ColorModeContext);
 
   const [socket, setSocket] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const newSocket = new WebSocket('ws://192.168.18.217:3000/'); // Ganti dengan URL WebSocket server Anda
+    const newSocket = io("http://localhost:3000", {
+      transports: ["websocket"],
+    });
 
-    newSocket.onopen = () => {
-      console.log('Connected to WebSocket server.');
-    };
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.IO server.");
+    });
 
-    newSocket.onmessage = (event) => {
+    newSocket.on("message", (data) => {
       try {
-        const receivedMessage = JSON.parse(event.data);
-        setMessages((prevMessages) => [...prevMessages, `Received: ${receivedMessage.data.message}`]);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          `Received: ${data.message}`,
+        ]);
       } catch (error) {
-        console.error('Error parsing message:', error);
+        console.error("Error processing message:", error);
       }
-    };
+    });
 
-    newSocket.onclose = () => {
-      console.log('Disconnected from WebSocket server.');
-    };
+    newSocket.on("disconnect", () => {
+      console.log("Disconnected from Socket.IO server.");
+    });
 
-    newSocket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
+    newSocket.on("error", (error) => {
+      console.error("Socket.IO error:", error);
+    });
 
     setSocket(newSocket);
-
-    return () => {
-      newSocket.close();
-    };
   }, []);
 
   useEffect(() => {
-    console.log(messages)
-  }, [messages])
+    console.log(messages);
+  }, [messages]);
 
   return (
     <Box display="flex" justifyContent="end" p={2}>
