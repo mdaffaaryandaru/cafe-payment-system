@@ -14,7 +14,8 @@ import { ColorModeContext, useMode } from "./theme";
 import OrderPage from "./Pages/OrderPage/OrderPage";
 import DaftarMenu from "./Pages/DaftarMenu/DaftarMenu";
 import PaymentPage from "./Pages/Payment/PaymentPage";
-// import Calendar from "./scenes/calendar/calendar";
+import OrderDetailCustomer from "./Pages/OrderPage/OrderDetailCustomer";
+
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -35,6 +36,7 @@ function App() {
               <Route path="/daftar-menu" element={<DaftarMenu />} />
               <Route path="/order/pembayaran" element={<PaymentPage />} />
               <Route path="/order/:noMeja" element={<OrderPage />} />
+              <Route path="/order-tracker/:id/:namaPelanggan" element={<OrderDetailCustomer />} />
               {/* <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
               <Route path="/pie" element={<Pie />} />
