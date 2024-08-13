@@ -46,6 +46,14 @@ export class OrderService {
     });
   }
 
+  async findOne(id: number): Promise<Order> {
+    return this.orderRepository.findOne({ where: { id } });
+  }
+
+  async update(order: Order): Promise<Order> {
+    return this.orderRepository.save(order);
+  }
+
   async findAllOrder(): Promise<Order[]> {
     const orders = await this.orderRepository.find({
       relations: ['orderan'],

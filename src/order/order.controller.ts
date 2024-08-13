@@ -11,6 +11,8 @@ import {
   Logger,
   BadRequestException,
   Res,
+  NotFoundException,
+  Put,
 } from '@nestjs/common';
 // import { WebSocketGatewayService } from '../websocket.gateway'; // Import WebSocketGatewayService
 import { OrderService } from './order.service';
@@ -27,6 +29,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { log } from 'console';
 import { AppGateway } from '../app.gateway';
 import { join } from 'path';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('order')
 export class OrderController {
@@ -93,6 +96,59 @@ export class OrderController {
     return order;
   }
 
+  @Put('update-order/:id')
+  @ApiOperation({ summary: 'Update an existing order item' })
+  @ApiResponse({
+    status: 200,
+    description: 'The order item has been successfully updated.',
+    type: Order,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'The order to update',
+    type: UpdateOrderDto,
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        noMeja: { type: 'number', example: 1 },
+        namaPelanggan: { type: 'string', example: 'John Doe' },
+        statusPesanan: { type: 'string', example: 'Pending' },
+        jenisPembayaran: { type: 'string', example: 'Cash' },
+        totalHarga: { type: 'number', example: 100000 },
+        gambarTransaksi: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('gambarTransaksi'))
+  async updateOrder(
+    @Param('id') id: number,
+    @Body() updateOrderDto: UpdateOrderDto,
+    @UploadedFile() gambarTransaksi: Express.Multer.File,
+  ): Promise<Order> {
+    const order = await this.orderService.findOne(id);
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    // Update the order entity with new values
+    if (updateOrderDto.noMeja !== undefined)
+      order.noMeja = updateOrderDto.noMeja;
+    if (updateOrderDto.namaPelanggan !== undefined)
+      order.namaPelanggan = updateOrderDto.namaPelanggan;
+    if (updateOrderDto.statusPesanan !== undefined)
+      order.statusPesanan = updateOrderDto.statusPesanan;
+    if (updateOrderDto.jenisPembayaran !== undefined)
+      order.jenisPembayaran = updateOrderDto.jenisPembayaran;
+    if (updateOrderDto.totalHarga !== undefined)
+      order.totalHarga = updateOrderDto.totalHarga;
+    if (gambarTransaksi) order.gambarTransaksi = gambarTransaksi.filename;
+
+    const updatedOrder = await this.orderService.update(order);
+    this.appGateway.sendOrderNotification(updatedOrder);
+    return updatedOrder;
+  }
   @Get('images/:gambarTransaksi')
   getImage(
     @Param('gambarTransaksi') gambarTransaksi: string,
