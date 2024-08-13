@@ -10,6 +10,7 @@ import {
   UploadedFile,
   Logger,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
 // import { WebSocketGatewayService } from '../websocket.gateway'; // Import WebSocketGatewayService
 import { OrderService } from './order.service';
@@ -20,10 +21,12 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { Response } from 'express'; // Pastikan impor dari 'express'
 import { Order } from './order.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { log } from 'console';
 import { AppGateway } from '../app.gateway';
+import { join } from 'path';
 
 @Controller('order')
 export class OrderController {
@@ -68,8 +71,6 @@ export class OrderController {
     @Body() createOrderDto: CreateOrderDto,
     @UploadedFile() gambarTransaksi: Express.Multer.File,
   ): Promise<Order> {
-    console.log('Received createOrderDto:', createOrderDto);
-    console.log('Received gambarTransaksi:', gambarTransaksi);
     // Parse orderan if it is a string
     if (typeof createOrderDto.orderan === 'string') {
       try {
@@ -88,9 +89,23 @@ export class OrderController {
       createOrderDto,
       gambarTransaksi,
     );
-    const sendWebSocket = this.appGateway.sendOrderNotification(order);
-    console.log('sendWebSocket', sendWebSocket);
+    this.appGateway.sendOrderNotification(order);
     return order;
+  }
+
+  @Get('images/:gambarTransaksi')
+  getImage(
+    @Param('gambarTransaksi') gambarTransaksi: string,
+    @Res() res: Response,
+  ) {
+    const imagePath = join(
+      __dirname,
+      '..',
+      '..',
+      'file-transaksi',
+      gambarTransaksi,
+    );
+    return res.sendFile(imagePath);
   }
 
   @Get()

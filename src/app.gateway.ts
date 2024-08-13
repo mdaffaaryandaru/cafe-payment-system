@@ -6,34 +6,50 @@ import {
   OnGatewayDisconnect,
   WsResponse,
   WebSocketServer,
+  OnGatewayInit,
 } from '@nestjs/websockets';
 import { Injectable } from '@nestjs/common';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
-@WebSocketGateway({ namespace: 'events', transports: ['websocket'] })
-export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
+@WebSocketGateway({
+  namespace: 'events',
+  transports: ['websocket'],
+  cors: {
+    origin: '*', // Atur origin sesuai kebutuhan Anda
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
+  },
+})
+export class AppGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
+  private logger: Logger = new Logger('AppGateway');
 
-  handleConnection(client: any, ...args: any[]) {
-    console.log('Client connected:', client.id);
+  afterInit(server: Server) {
+    this.logger.log('Init');
   }
 
-  handleDisconnect(client: any) {
-    console.log('Client disconnected:', client.id);
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Client connected: ${client.id}`);
+  }
+
+  handleDisconnect(client: Socket) {
+    this.logger.log(`Client disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() data: any): WsResponse<any> {
-
-    return {
-      event: 'message',
-      data: { message: 'Hello, world!', received: data },
-    };
+  handleMessage(@MessageBody() message: any): WsResponse<string> {
+    this.logger.log(`Message received: ${message}`);
+    return { event: 'message', data: 'Message received' };
   }
 
   sendOrderNotification(order: any) {
-    this.server.emit('orderCreated', order);
+    console.log(`Sending order notification: ${JSON.stringify(order)}`);
+    this.server.emit('orderNotification', order);
   }
 }
