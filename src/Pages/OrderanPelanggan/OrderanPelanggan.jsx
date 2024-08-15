@@ -23,6 +23,7 @@ import {
   putWithImage,
 } from "../../utils/api";
 import ModalViewOrderan from "./Modal/ModalViewOrderan";
+import { Link } from "react-router-dom";
 
 const styleModal = {
   position: "absolute",
@@ -122,14 +123,16 @@ const OrderanPelanggan = () => {
       flex: 0.5,
       renderCell: (params) => (
         <div>
-          <ModalViewOrderan />
+          <Link to={`/detail-orderan-pelanggan/${params.row.id}`}>
+            Lihat Pesanan
+          </Link>
         </div>
       ),
     },
   ];
   return (
     <Box m="20px">
-      <Header title="Orderan Pelanggan" subtitle="Manage Your Team" />
+      <Header title="Orderan Pelanggan" />
       <Box
         m="40px 0 0 0"
         height="75vh"

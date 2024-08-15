@@ -7,6 +7,8 @@ import { get } from "../../utils/api";
 const OrderPage = () => {
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const { noMeja } = useParams();
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -47,21 +49,22 @@ const OrderPage = () => {
   }, []);
 
   useEffect(() => {
-    if (dataMenu.length != 0) {
-      // Pastikan dataMenu tidak null
-      console.log("test");
-      console.log(dataMenu);
-
-      const storedData = localStorage.getItem("order");
-      if (storedData) {
-        try {
-          const orderJson = JSON.parse(storedData);
-          setCart(orderJson.orderan);
-        } catch (e) {
-          console.error("Error parsing JSON from localStorage:", e);
+    const loadCartFromLocalStorage = async () => {
+      if (dataMenu.length !== 0) {
+        const storedData = localStorage.getItem("order");
+        if (storedData != null) {
+          try {
+            const orderJson = JSON.parse(storedData);
+            console.log(orderJson.orderan)
+            setCart(orderJson.orderan);
+          } catch (e) {
+            console.error("Error parsing JSON from localStorage:", e);
+          }
         }
       }
-    }
+    };
+
+    loadCartFromLocalStorage();
   }, [dataMenu]);
 
   const groupByCategory = () => {
@@ -167,9 +170,9 @@ const OrderPage = () => {
     navigate("/order/pembayaran");
   };
 
-  useEffect(() => {
-    console.log(storeDataOrder);
-  }, [storeDataOrder]);
+  // useEffect(() => {
+  //   console.log(storeDataOrder);
+  // }, [storeDataOrder]);
 
   return (
     <main className="">
@@ -192,28 +195,24 @@ const OrderPage = () => {
       <div className="w-full h-screen p-6 xl:p-10 max-md:overflow-hidden relative xl:grid xl:grid-cols-[1.5fr_1fr]">
         <div className="xl:me-10">
           <div className="flex flex-col gap-8">
-            {groupByCategory().map((categoryMenu, i) => (
-              <div key={i} className="w-full">
-                <h1 className="text-2xl font-bold mb-3">
-                  {categoryMenu.kategori}
-                </h1>
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xl:gap-5 justify-center">
-                  {categoryMenu.menu.map((menu, x) => (
+          {groupByCategory().map((categoryMenu) => (
+              <div key={categoryMenu.kategori} className="w-full mb-5">
+                <h1 className="text-2xl font-bold mb-3">{categoryMenu.kategori}</h1>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 xl:gap-5">
+                  {categoryMenu.menu.map((menu) => (
                     <div
-                      key={x}
+                      key={menu.id} // Ganti dengan ID unik jika ada
                       className="flex gap-2 bg-slate-800 p-3 rounded"
                     >
                       <img
-                        className=" aspect-square object-cover w-20 h-20 rounded"
+                        className="aspect-square object-cover w-20 h-20 rounded"
                         src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`}
                         alt={menu.namaMenu}
                       />
                       <div className="w-full flex justify-between items-center">
                         <div className="flex flex-col">
                           <h4 className="text-xl font-bold">{menu.namaMenu}</h4>
-                          <span className=" text-gray-500">
-                            {menu.kategoriMenu}
-                          </span>
+                          <span className="text-gray-500">{menu.kategoriMenu}</span>
                           <p className="text-base">
                             {Number(menu.hargaMenu).toLocaleString("id-ID", {
                               style: "currency",
@@ -262,12 +261,11 @@ const OrderPage = () => {
               </div>
               <div className="flex flex-col gap-2 py-8">
                 {cart.map((item, i) => {
-                  console.log(item);
-                  console.log(dataMenu);
+                  console.log(item)
+                  console.log(dataMenu)
                   const menu = dataMenu.find((menu) => menu.id === item.menuId);
-                  console.log(menu);
-                  console.log(Number(item.harga));
-                  return (
+                  // console.log(menu[i].gambarMenu);
+                  if(menu) return (
                     <div
                       key={i}
                       className="w-full flex gap-6 justify-center items-center bg-slate-800 py-1 px-3 rounded"

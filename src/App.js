@@ -15,6 +15,9 @@ import OrderPage from "./Pages/OrderPage/OrderPage";
 import DaftarMenu from "./Pages/DaftarMenu/DaftarMenu";
 import PaymentPage from "./Pages/Payment/PaymentPage";
 import OrderanPelanggan from "./Pages/OrderanPelanggan/OrderanPelanggan";
+import OrderDetailCustomer from "./Pages/OrderPage/OrderDetailCustomer";
+import { ProviderNotification } from "./Components/ContextNotification/ContextNotification";
+import DetailOrderanPelanggan from "./Pages/OrderanPelanggan/DetailOrderanPelanggan";
 // import Calendar from "./scenes/calendar/calendar";
 
 function App() {
@@ -26,30 +29,34 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
-          {!isOrderPage && <Sidebar />}
-          <main className="content">
-            {!isOrderPage && <Topbar />}
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/daftar-menu" element={<DaftarMenu />} />
-              <Route path="/order/pembayaran" element={<PaymentPage />} />
-              <Route path="/order/:noMeja" element={<OrderPage />} />
-              <Route
-                path="/detail-orderan-pelanggan"
-                element={<OrderanPelanggan />}
-              />
-              {/* <Route path="/form" element={<Form />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/geography" element={<Geography />} /> */}
-            </Routes>
-          </main>
-        </div>
+          <div className="app">
+            {!isOrderPage && <Sidebar />}
+            <ProviderNotification>
+              <main className="content">
+                {!isOrderPage && <Topbar />}
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/team" element={<Team />} />
+                  <Route path="/daftar-menu" element={<DaftarMenu />} />
+                  <Route path="/order/pembayaran" element={<PaymentPage />} />
+                  <Route path="/order/:noMeja" element={<OrderPage />} />
+                  <Route path="order-tracker/:id/:namaPelanggan" element={<OrderDetailCustomer/>}/>
+                  <Route
+                    path="/detail-orderan-pelanggan"
+                    element={<OrderanPelanggan />}
+                  />
+                  <Route path="detail-orderan-pelanggan/:id" element={<DetailOrderanPelanggan/>}/>
+                  {/* <Route path="/form" element={<Form />} />
+                  <Route path="/bar" element={<Bar />} />
+                  <Route path="/pie" element={<Pie />} />
+                  <Route path="/line" element={<Line />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/calendar" element={<Calendar />} />
+                  <Route path="/geography" element={<Geography />} /> */}
+                </Routes>
+              </main>
+            </ProviderNotification>
+          </div>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

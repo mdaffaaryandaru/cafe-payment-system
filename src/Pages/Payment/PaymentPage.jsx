@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { get, postWithFile } from '../../utils/api'
 import { useNavigate } from 'react-router-dom'
 import io from 'socket.io-client';
+import { ContextNotification } from '../../Components/ContextNotification/ContextNotification';
 
 const PaymentPage = () => {
     const navigate = useNavigate()
@@ -88,6 +89,35 @@ const PaymentPage = () => {
         });
     }
 
+    // connect websocket
+    useEffect(() => {
+        const newSocket = io("http://192.168.18.217:3000", {
+            transports: ["websocket"],
+        });
+    
+        newSocket.on("connect", () => {
+            console.log("Connected to Socket.IO server.");
+        });
+    
+        newSocket.on("message", (data) => {
+            try {
+                console.log("Message received:", data);
+            } catch (error) {
+                console.error("Error processing message:", error);
+            }
+        });
+    
+        newSocket.on("disconnect", () => {
+            console.log("Disconnected from Socket.IO server.");
+        });
+    
+        newSocket.on("error", (error) => {
+            console.error("Socket.IO error:", error);
+        });
+    
+        setSocket(newSocket);
+    }, [])
+
     const handleSubmitPayment = async(e) => {
         e.preventDefault()
 
@@ -109,27 +139,19 @@ const PaymentPage = () => {
             console.error(error)
         }
 
-        if (socket && message.trim() !== '') {
-            socket.send('hello world');
-            console.log('toket di kirim')
-            setMessage(''); // Mengosongkan input setelah mengirim pesan
-        }
+        // console.log(socket)
+        // if (socket) {
+        //     try {
+        //       socket.emit('message', 'test');
+        //       console.log('Message sent:', 'test');
+        //     } catch (error) {
+        //       console.error('Error sending message:', error);
+        //     }
+        //   } else {
+        //     console.error('Socket is not connected.');
+        //   }
         
     }
-
-    // connect websocket
-    useEffect(() => {
-        const socketIo = io("http://192.168.18.217:3000");
-        setSocket(socketIo);
-
-        socketIo.on('message', (msg) => {
-            setMessages((prevMessages) => [...prevMessages, msg]);
-        });
-
-        return () => {
-            socketIo.disconnect();
-        };
-    }, [])
     
 
     return (
@@ -203,6 +225,7 @@ const PaymentPage = () => {
                                 type="file"
                                 name='gambarTransaksi'
                                 onChange={handleOnChange}
+                                required
                             />
                             {/* <p>{filename.name ?? 'Bukti pembayaran belum di upload'}</p> */}
                         </div>
