@@ -1,6 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity('menu')
 export class Menu {
   @PrimaryGeneratedColumn()
   id: number;
@@ -16,6 +21,10 @@ export class Menu {
 
   @Column()
   hargaMenu: string;
+
+  
+  @CreateDateColumn()
+  createdDate: Date;
 
   @Column({ nullable: true })
   gambarMenu: string;

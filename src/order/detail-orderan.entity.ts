@@ -1,8 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+} from 'typeorm';
 import { Order } from './order.entity';
 import { Menu } from '../menu/menu.entity';
 
-@Entity()
+@Entity('detail_orderan')
 export class DetailOrderan {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,4 +33,7 @@ export class DetailOrderan {
 
   @Column()
   harga: number;
+
+  @CreateDateColumn()
+  createdDate: Date;
 }

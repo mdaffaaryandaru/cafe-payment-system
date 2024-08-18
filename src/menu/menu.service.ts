@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { Menu } from './menu.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,9 +15,13 @@ export class MenuService {
     private menuRepository: Repository<Menu>,
   ) {}
 
-  createMenu(createMenuDto: CreateMenuDto): Promise<Menu> {
-    const menu = this.menuRepository.create(createMenuDto);
-    return this.menuRepository.save(menu);
+  async createMenu(createMenuDto: CreateMenuDto): Promise<Menu> {
+    try {
+      const menu = this.menuRepository.create(createMenuDto);
+      return await this.menuRepository.save(menu);
+    } catch (error) {
+      throw new BadRequestException('Error creating menu');
+    }
   }
 
   findAllMenu(): Promise<Menu[]> {

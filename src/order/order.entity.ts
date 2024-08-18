@@ -1,7 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
 import { DetailOrderan } from './detail-orderan.entity';
 
-@Entity()
+@Entity('order_pelanggan')
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
@@ -25,6 +31,9 @@ export class Order {
 
   @Column()
   totalHarga: number;
+
+  @CreateDateColumn()
+  createdDate: Date;
 
   @Column({ nullable: true })
   gambarTransaksi: string;

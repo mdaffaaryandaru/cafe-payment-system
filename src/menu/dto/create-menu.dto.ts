@@ -5,6 +5,7 @@ import {
   Matches,
   IsInt,
   IsOptional,
+  IsDate,
 } from 'class-validator';
 
 export class CreateMenuDto {
