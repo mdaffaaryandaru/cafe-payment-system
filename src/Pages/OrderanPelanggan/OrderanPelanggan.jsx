@@ -69,20 +69,6 @@ const OrderanPelanggan = () => {
     fetchItems();
   }, []);
 
-  React.useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
-  // DELETE data menu
-  const handleDelete = async (id) => {
-    try {
-      await del(`/pegawai/delete-pegawai/${id}`);
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-    fetchItems();
-  };
-
   const columns = [
     {
       field: "id",
@@ -123,7 +109,7 @@ const OrderanPelanggan = () => {
       flex: 0.5,
       renderCell: (params) => (
         <div>
-          <Link to={`/detail-orderan-pelanggan/${params.row.id}`}>
+          <Link className="bg-lime-400 p-2 text-black rounded" to={`/detail-orderan-pelanggan/${params.row.id}`}>
             Lihat Pesanan
           </Link>
         </div>
