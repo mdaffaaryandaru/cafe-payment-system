@@ -42,7 +42,7 @@ const OrderanPelanggan = () => {
   const colors = tokens(theme.palette.mode);
   // for open modal add
   const [open, setOpen] = React.useState(false);
-  const [dataPegawai, setDataPegawai] = React.useState([]);
+  const [dataOrder, setdataOrder] = React.useState([]);
   const [formData, setFormData] = React.useState({
     namaPegawai: "",
     alamatPegawai: "",
@@ -60,7 +60,7 @@ const OrderanPelanggan = () => {
     try {
       const data = await get("/order");
       console.log(data);
-      setDataPegawai(data);
+      setdataOrder(data);
     } catch (error) {
       console.error("Error fetching items:", error);
     }
@@ -146,7 +146,7 @@ const OrderanPelanggan = () => {
         }}
       >
         <DataGrid
-          rows={dataPegawai}
+          rows={dataOrder}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />
