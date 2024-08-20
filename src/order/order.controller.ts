@@ -92,7 +92,7 @@ export class OrderController {
       createOrderDto,
       gambarTransaksi,
     );
-    this.appGateway.sendOrderNotification(order);
+    this.appGateway.sendNotification(order);
     return order;
   }
 
@@ -146,7 +146,7 @@ export class OrderController {
     if (gambarTransaksi) order.gambarTransaksi = gambarTransaksi.filename;
 
     const updatedOrder = await this.orderService.update(order);
-    this.appGateway.sendOrderNotification(updatedOrder);
+    // this.appGateway.sendOrderNotification(updatedOrder);
     return updatedOrder;
   }
   @Get('images/:gambarTransaksi')
