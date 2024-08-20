@@ -8,6 +8,8 @@ import {
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { pusher } from './pusher.config';
+import { Order } from './order/order.entity';
 
 @Injectable()
 @WebSocketGateway({
@@ -22,17 +24,10 @@ export class AppGateway {
   private logger: Logger = new Logger('AppGateway');
 
   @SubscribeMessage('orderNotification')
-  handleMessage(@MessageBody() message: any) {
-    this.logger.log(`Message received: ${message}`);
-    this.server.emit('orderNotification', message);
+  handleMessage(@MessageBody() order: any) {
+    pusher.trigger('my-channel', 'my-event', {
+      message: order,
+    });
   }
 
-  @SubscribeMessage('order')
-  sendOrderNotification(@MessageBody() order: any) {
-    return { event: 'order', data: order };
-  }
-
-  sendNotification(order: any) {
-    this.server.emit('order', order);
-  }
 }

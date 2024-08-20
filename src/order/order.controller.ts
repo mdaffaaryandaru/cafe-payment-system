@@ -92,7 +92,7 @@ export class OrderController {
       createOrderDto,
       gambarTransaksi,
     );
-    this.appGateway.sendNotification(order);
+    this.appGateway.handleMessage(order);
     return order;
   }
 

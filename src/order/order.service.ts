@@ -60,13 +60,8 @@ export class OrderService {
     });
 
     return orders.map((order) => {
-      const totalHarga = order.orderan.reduce(
-        (total, item) => total + item.jumlah * item.harga,
-        0,
-      );
       return {
         ...order,
-        totalHarga,
       };
     });
   }
