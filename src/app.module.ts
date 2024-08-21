@@ -13,6 +13,8 @@ import { DetailOrderan } from './order/detail-orderan.entity';
 // import { WebSocketGatewayService } from './websocket.gateway';
 import { AppGateway } from './app.gateway';
 import { ConfigModule } from '@nestjs/config';
+import { TopingModule } from './toping/toping.module';
+import { Toping } from './toping/entities/toping.entity';
 
 @Module({
   imports: [
@@ -23,12 +25,13 @@ import { ConfigModule } from '@nestjs/config';
       username: 'root',
       password: '',
       database: 'seruni_database',
-      entities: [Menu, Pegawai, Order, DetailOrderan],
+      entities: [Menu, Pegawai, Order, DetailOrderan, Toping],
       synchronize: true,
     }),
     MenuModule,
     PegawaiModule,
     OrderModule,
+    TopingModule,
     ConfigModule.forRoot(),
   ],
   controllers: [AppController],

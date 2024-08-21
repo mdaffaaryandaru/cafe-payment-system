@@ -112,7 +112,7 @@ export class PegawaiController {
     description: 'All pegawai',
     type: [Pegawai],
   })
-  @ApiResponse({ status: 404, description: 'Menu not found.' })
+  @ApiResponse({ status: 404, description: 'pegawai not found.' })
   findAllMenu(): Promise<Pegawai[]> {
     return this.pegawaiService.findAllPegawai();
   }
@@ -121,7 +121,7 @@ export class PegawaiController {
   @ApiOperation({ summary: 'delete existing id' })
   @ApiResponse({
     status: 200,
-    description: 'The menu item has been successfully deleted.',
+    description: 'The toping item has been successfully deleted.',
   })
   @ApiResponse({ status: 404, description: 'Pegawai not found.' })
   async deletePegawai(@Param('id', ParseIntPipe) id: number): Promise<void> {

@@ -29,5 +29,4 @@ export class AppGateway {
       message: order,
     });
   }
-
 }

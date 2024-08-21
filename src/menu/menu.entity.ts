@@ -1,14 +1,22 @@
+import { Toping } from 'src/toping/entities/toping.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('menu')
 export class Menu {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => Toping, (toping) => toping.menu, {
+    cascade: true,
+  })
+  toping: Toping[];
 
   @Column()
   namaMenu: string;
@@ -22,7 +30,6 @@ export class Menu {
   @Column()
   hargaMenu: string;
 
-  
   @CreateDateColumn()
   createdDate: Date;
 
