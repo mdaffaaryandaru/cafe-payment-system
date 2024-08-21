@@ -13,11 +13,6 @@ export class Menu {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Toping, (toping) => toping.menu, {
-    cascade: true,
-  })
-  toping: Toping[];
-
   @Column()
   namaMenu: string;
 
@@ -35,4 +30,8 @@ export class Menu {
 
   @Column({ nullable: true })
   gambarMenu: string;
+
+  @OneToMany(() => Toping, (toping) => toping.menu, { cascade: true })
+  @JoinColumn()
+  topings: Toping[];
 }

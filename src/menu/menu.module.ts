@@ -7,10 +7,11 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { extname, join } from 'path';
 import * as multer from 'multer';
+import { Toping } from 'src/toping/entities/toping.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Menu]),
+    TypeOrmModule.forFeature([Menu, Toping]),
     MulterModule.register({
       storage: multer.diskStorage({
         destination: './files',

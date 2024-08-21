@@ -28,9 +28,7 @@ import { join } from 'path';
 
 @Controller('menu')
 export class MenuController {
-  constructor(
-    private readonly menuService: MenuService,
-  ) {}
+  constructor(private readonly menuService: MenuService) {}
 
   @Post('create-menu')
   @ApiOperation({ summary: 'Create a new menu item' })
@@ -56,6 +54,10 @@ export class MenuController {
           type: 'string',
           format: 'binary',
         },
+        topings: {
+          type: 'array',
+          items: { $ref: '../menu/dto/create-menu.dto.ts' },
+        },
       },
     },
   })
@@ -67,12 +69,13 @@ export class MenuController {
     try {
       if (gambarMenu) {
         createMenuDto.gambarMenu = gambarMenu.filename;
-      } 
+      }
       if (
         !createMenuDto.namaMenu ||
         !createMenuDto.stokMenu ||
         !createMenuDto.kategoriMenu ||
-        !createMenuDto.hargaMenu
+        !createMenuDto.hargaMenu ||
+        !createMenuDto.topings
       ) {
         throw new BadRequestException('Missing required fields');
       }
@@ -106,6 +109,16 @@ export class MenuController {
           type: 'string',
           format: 'binary',
         },
+        topings: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              namaToping: { type: 'string', example: 'Keju' },
+              hargaToping: { type: 'number', example: 5000 },
+            },
+          },
+        },
       },
     },
   })
@@ -118,7 +131,7 @@ export class MenuController {
     try {
       if (gambarMenu) {
         updateMenuDto.gambarMenu = gambarMenu.filename;
-      } 
+      }
       // Validasi tambahan jika diperlukan
       if (
         !updateMenuDto.namaMenu ||

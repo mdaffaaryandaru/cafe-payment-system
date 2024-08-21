@@ -16,11 +16,11 @@ export class Toping {
   namaToping: string;
 
   @Column()
-  hargaToping: string;
+  hargaToping: number;
 
   @CreateDateColumn()
   createdDate: Date;
 
-  @ManyToOne(() => Menu, (menu) => menu.toping)
-  menu: Menu;
+  @ManyToOne(() => Menu, (menu) => menu.topings)
+  menu?: Menu;
 }

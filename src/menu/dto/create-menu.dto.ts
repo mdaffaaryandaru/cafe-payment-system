@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -6,7 +7,10 @@ import {
   IsInt,
   IsOptional,
   IsDate,
+  IsArray,
+  ValidateNested,
 } from 'class-validator';
+import { CreateTopingDto } from 'src/toping/dto/create-toping.dto';
 
 export class CreateMenuDto {
   // make example for dto menu
@@ -37,4 +41,9 @@ export class CreateMenuDto {
   @IsString()
   @ApiProperty()
   gambarMenu?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateTopingDto)
+  topings: CreateTopingDto[];
 }
