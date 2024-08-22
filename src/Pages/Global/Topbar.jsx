@@ -32,6 +32,7 @@ const Topbar = () => {
 
     // Bind to the event
     channel.bind('my-event', (data) => {
+      alert(data)
       setMessage(curr => [...curr, JSON.stringify(data)]);
     });
 
@@ -64,9 +65,14 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
+        <div className="p-2 relative group">
           <NotificationsOutlinedIcon />
-        </IconButton>
+          <div className="absolute top-8 p-2 right-0 w-52 max-h-32 invisible group-hover:visible rounded bg-slate-700">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="p-1 hover:bg-slate-800">Notifikasi {i}</div>
+            ))}
+          </div>
+        </div>
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
