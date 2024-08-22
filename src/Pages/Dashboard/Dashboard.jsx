@@ -27,21 +27,17 @@ const columns = [
   {
     field: "noMeja",
     headerName: "Nomor Meja",
-    flex: 1,
     cellClassName: "name-collumn--cell",
   },
   {
     field: "namaPelanggan",
     headerName: "Nama Pelanggan",
-    headerAlign: "left",
-    align: "left",
+    flex: 1,
   },
   {
     field: "statusPesanan",
     headerName: "Status Pesanan",
     flex: 1,
-    align: "center",
-    headerAlign: "center",
   },
   {
     field: "jenisPembayaran",
@@ -143,7 +139,7 @@ const Dashboard = () => {
       tooltip: {
         callbacks: {
           label: function(tooltipItem) {
-            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+            return `${Number(tooltipItem.raw).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`;
           },
         },
       },
@@ -205,7 +201,7 @@ const Dashboard = () => {
       <div className="w-full">
         <div className="w-full grid grid-cols-3 gap-5">
           <div className="w-full bg-slate-800 p-3">
-            <p className="text-base">Total Pemasukan</p>
+            <p className="text-base">Total Pemasukan <span className="text-xs">(per minggu)</span></p>
             <h1 className="text-3xl font-bold">{Number(totalIncome).toLocaleString('id-ID', { style: "currency", currency: "IDR"})}</h1>
             <Line className="mt-2" data={data} options={options} />
           </div>

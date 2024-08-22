@@ -6,6 +6,7 @@ import { ContextNotification } from '../../Components/ContextNotification/Contex
 
 const PaymentPage = () => {
     const navigate = useNavigate()
+    const { addNotif } = useContext(ContextNotification)
 
     const [cart, setCart] = useState([])
     const [dataMenu, setDataMenu] = useState([])
@@ -116,10 +117,19 @@ const PaymentPage = () => {
         });
     
         setSocket(newSocket);
+
+        return () => {
+            newSocket.disconnect();
+        };
     }, [])
 
     const handleSubmitPayment = async(e) => {
         e.preventDefault()
+
+        if (socket) {
+            socket.emit('order', 'Hello from client!');
+            console.log('Message sent!');
+        }
 
         const newFormData = new FormData()
         newFormData.append('noMeja', dataOrder.noMeja)
@@ -138,18 +148,6 @@ const PaymentPage = () => {
         } catch (error) {
             console.error(error)
         }
-
-        // console.log(socket)
-        // if (socket) {
-        //     try {
-        //       socket.emit('message', 'test');
-        //       console.log('Message sent:', 'test');
-        //     } catch (error) {
-        //       console.error('Error sending message:', error);
-        //     }
-        //   } else {
-        //     console.error('Socket is not connected.');
-        //   }
         
     }
     

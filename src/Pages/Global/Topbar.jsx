@@ -6,65 +6,40 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import { io } from "socket.io-client";
 import { ContextNotification } from "../../Components/ContextNotification/ContextNotification";
+import Pusher from 'pusher-js';
 
 const Topbar = () => {
-  const { notif } = useContext(ContextNotification)
-
-  console.log("Current notifications:", notif);
-
-  useEffect(() => {
-    console.log(notif)
-  }, [notif])
-
+  const [message, setMessage] = useState([]);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  // useEffect(() => {
-  //   const newSocket = io("http://localhost:3000", {
-  //     transports: ["websocket"],
-  //   });
+  const {notif} = useContext(ContextNotification)
 
-  //   newSocket.on("connect", () => {
-  //     console.log("Connected to Socket.IO server.");
-  //   });
+  useEffect(() => {
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
 
-  //   newSocket.on("message", (data) => {
-  //     console.log(data.message)
-      // try {
-      //   setMessages((prevMessages) => [
-      //     ...prevMessages,
-      //     `Received: ${data.message}`,
-      //   ]);
-      // } catch (error) {
-      //   console.error("Error processing message:", error);
-      // }
-    // });
+    // Initialize Pusher
+    const pusher = new Pusher('eeac291f5408aa1cf514', {
+      cluster: 'ap1',
+    });
 
-  //   newSocket.on("disconnect", () => {
-  //     console.log("Disconnected from Socket.IO server.");
-  //   });
+    // Subscribe to the channel
+    const channel = pusher.subscribe('my-channel');
 
-  //   newSocket.on("error", (error) => {
-  //     console.error("Socket.IO error:", error);
-  //   });
+    // Bind to the event
+    channel.bind('my-event', (data) => {
+      setMessage(curr => [...curr, JSON.stringify(data)]);
+    });
 
-  //   setSocket(newSocket);
-  // }, []);
-
-  // const sendMessages = () => {
-  //   console.log('test')
-  //   socket.send({
-  //     message: "hello"
-  //   })
-    // socket.emit('message', message);
-    // setMessage('');
-  // };
-
-  // useEffect(() => {
-  //   console.log(messages);
-  // }, [messages]);
+    // Cleanup on component unmount
+    return () => {
+      pusher.unsubscribe('my-channel');
+    };
+  }, []);
 
   return (
     <Box display="flex" justifyContent="end" p={2}>

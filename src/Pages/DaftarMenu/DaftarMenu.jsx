@@ -39,6 +39,7 @@ const DaftarMenu = () => {
     stokMenu: "",
     kategoriMenu: "",
     hargaMenu: "",
+    topings: [],
   });
 
   const [formDataEdit, setFormDataEdit] = React.useState({
@@ -47,6 +48,7 @@ const DaftarMenu = () => {
     stokMenu: "",
     kategoriMenu: "",
     hargaMenu: "",
+    topings: [],
   });
 
   // GET all data
@@ -80,8 +82,14 @@ const DaftarMenu = () => {
     newFormData.append("kategoriMenu", formData.kategoriMenu);
     newFormData.append("hargaMenu", formData.hargaMenu);
 
+    formData.topings.map((topping, index) => {
+      Object.entries(topping).map(([key, value]) => {
+        console.log(`topings[${index}][${key}]`, value);
+        newFormData.append(`topings[${index}][${key}]`, value);
+      });
+    });
+
     try {
-      // const response = await post('/menu/create-menu', newFormData)
       const response = await postWithFile("/menu/create-menu", newFormData);
       console.log(response);
     } catch (error) {
@@ -112,12 +120,12 @@ const DaftarMenu = () => {
     newFormData.append("kategoriMenu", formDataEdit.kategoriMenu);
     newFormData.append("hargaMenu", formDataEdit.hargaMenu);
 
-    try {
-      await putWithImage(`/menu/edit-menu/${id}`, newFormData);
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-    fetchItems();
+    // try {
+    //   await putWithImage(`/menu/edit-menu/${id}`, newFormData);
+    // } catch (error) {
+    //   console.error("Error deleting item:", error);
+    // }
+    // fetchItems();
   };
 
   const handleSelectionModelChange = (newSelection) => {
