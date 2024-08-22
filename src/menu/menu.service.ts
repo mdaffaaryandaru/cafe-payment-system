@@ -96,12 +96,22 @@ export class MenuService {
   }
 
   //!Belum Delete Bersama Toping
-  deleteMenu = async (id: number): Promise<void> => {
-    const menu = await this.menuRepository.findOne({ where: { id } });
+  async deleteMenu(id: number): Promise<void> {
+    const menu = await this.menuRepository.findOne({
+      where: { id },
+      relations: ['topings'],
+    });
+
     if (!menu) {
       throw new NotFoundException(`Menu with ID ${id} not found`);
     }
 
+    // Hapus semua toping yang berelasi dengan menu
+    if (menu.topings && menu.topings.length > 0) {
+      await this.topingRepository.remove(menu.topings);
+    }
+
+    // Hapus menu
     await this.menuRepository.delete(id);
-  };
+  }
 }
