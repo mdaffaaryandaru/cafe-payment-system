@@ -21,7 +21,7 @@ import { Toping } from './toping/entities/toping.entity';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService): TypeOrmModule => ({
-        type: configService.get<'mysql'>('DB_TYPE'), // Pastikan tipe ini sesuai dengan yang didukung oleh TypeORM
+        type: configService.get<string>('DB_TYPE'), // Pastikan tipe ini sesuai dengan yang didukung oleh TypeORM
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USERNAME'),
@@ -29,6 +29,9 @@ import { Toping } from './toping/entities/toping.entity';
         database: configService.get<string>('DB_DATABASE'),
         entities: [Menu, Pegawai, Order, DetailOrderan, Toping],
         synchronize: true,
+        ssl: configService.get<boolean>('DB_SSL')
+          ? { rejectUnauthorized: false }
+          : false,
       }),
       inject: [ConfigService],
     }),
