@@ -17,51 +17,6 @@ export class OrderService {
     private readonly menuRepository: Repository<Menu>,
   ) {}
 
-  // async create(
-  //   createOrderDto: CreateOrderDto,
-  //   gambarTransaksi: Express.Multer.File,
-  // ): Promise<Order> {
-  //   const { orderan, ...orderData } = createOrderDto;
-
-  //   if (gambarTransaksi) {
-  //     // Example: save the file path or URL to the orderData
-  //     orderData.gambarTransaksi = gambarTransaksi.filename; // Adjust based on your storage solution
-  //   }
-
-  //   // Create the order entity
-  //   const order = this.orderRepository.create(orderData);
-
-  //   // Create the detail orderan entities
-  //   const detailOrderanEntities = await Promise.all(
-  //     orderan.map(async (detail) => {
-  //       const detailOrderan = this.detailOrderanRepository.create(detail);
-  //       detailOrderan.order = order; // Set the order reference
-
-  //       // Fetch the menu with topings
-  //       const menu = await this.menuRepository.findOne({
-  //         where: { id: detail.menuId },
-  //         relations: ['topings'],
-  //       });
-
-  //       if (menu) {
-  //         detailOrderan.menu = menu; // Set the menu reference with topings
-  //       }
-
-  //       return detailOrderan;
-  //     }),
-  //   );
-
-  //   // Save the order and detail orderan entities
-  //   await this.orderRepository.save(order);
-  //   await this.detailOrderanRepository.save(detailOrderanEntities);
-
-  //   // Return the saved order with detail orderan
-  //   return this.orderRepository.findOne({
-  //     where: { id: order.id },
-  //     relations: ['orderan', 'orderan.menu.topings'],
-  //   });
-  // }
-
   async create(
     createOrderDto: CreateOrderDto,
     gambarTransaksi: Express.Multer.File,
@@ -69,33 +24,68 @@ export class OrderService {
     const { orderan, ...orderData } = createOrderDto;
 
     if (gambarTransaksi) {
-      // Example: save the file path or URL to the orderData
-      orderData.gambarTransaksi = gambarTransaksi.filename; // Adjust based on your storage solution
+      orderData.gambarTransaksi = gambarTransaksi.filename;
     }
 
-    // Create the order entity
     const order = this.orderRepository.create(orderData);
 
-    // Create the detail orderan entities
-    const detailOrderanEntities = orderan.map((detail) => {
-      const detailOrderan = this.detailOrderanRepository.create(detail);
-      detailOrderan.order = order; // Set the order reference
-      return detailOrderan;
-    });
+    const detailOrderanEntities = await Promise.all(
+      orderan.map(async (detail) => {
+        const detailOrderan = this.detailOrderanRepository.create(detail);
+        detailOrderan.order = order;
 
-    // Save the order and detail orderan entities
+        const menu = await this.menuRepository.findOne({
+          where: { id: detail.menuId },
+          relations: ['topings'],
+        });
+
+        if (menu) {
+          detailOrderan.menu = menu;
+        }
+
+        return detailOrderan;
+      }),
+    );
+
     await this.orderRepository.save(order);
     await this.detailOrderanRepository.save(detailOrderanEntities);
 
-    // Return the saved order with detail orderan
-    return this.orderRepository.findOne({
+    const savedOrder = await this.orderRepository.findOne({
       where: { id: order.id },
-      relations: ['orderan'],
+      relations: ['orderan', 'orderan.menu.topings'],
     });
+
+    const transformedOrder = {
+      ...savedOrder,
+      orderan: savedOrder.orderan.map((detail) => ({
+        ...detail,
+        topings: detail.menu.topings,
+        menu: undefined,
+      })),
+    };
+    return transformedOrder as Order;
   }
 
   async findOne(id: number): Promise<Order> {
-    return this.orderRepository.findOne({ where: { id } });
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['orderan', 'orderan.menu.topings'],
+    });
+
+    if (!order) {
+      throw new BadRequestException('Order not found');
+    }
+
+    const transformedOrder = {
+      ...order,
+      orderan: order.orderan.map((detail) => ({
+        ...detail,
+        topings: detail.menu.topings,
+        menu: undefined,
+      })),
+    };
+
+    return transformedOrder as Order;
   }
 
   async update(order: Order): Promise<Order> {
@@ -104,24 +94,38 @@ export class OrderService {
 
   async findAllOrder(): Promise<Order[]> {
     const orders = await this.orderRepository.find({
-      relations: ['orderan'],
+      relations: ['orderan', 'orderan.menu.topings'],
     });
 
-    return orders.map((order) => {
-      return {
-        ...order,
-      };
-    });
+    return orders.map((order) => ({
+      ...order,
+      orderan: order.orderan.map((detail) => ({
+        ...detail,
+        topings: detail.menu.topings,
+        menu: undefined,
+      })),
+    }));
   }
 
   async findOrderById(id: number): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: { id },
-      relations: ['orderan'],
+      relations: ['orderan', 'orderan.menu.topings'],
     });
+
     if (!order) {
       throw new BadRequestException('Order not found');
     }
-    return order;
+
+    const transformedOrder = {
+      ...order,
+      orderan: order.orderan.map((detail) => ({
+        ...detail,
+        topings: detail.menu.topings,
+        menu: undefined,
+      })),
+    };
+
+    return transformedOrder as Order;
   }
 }
