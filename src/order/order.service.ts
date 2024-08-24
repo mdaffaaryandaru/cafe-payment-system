@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { DetailOrderan } from './detail-orderan.entity';
+import { Menu } from 'src/menu/menu.entity';
 
 @Injectable()
 export class OrderService {
@@ -12,7 +13,54 @@ export class OrderService {
     private readonly orderRepository: Repository<Order>,
     @InjectRepository(DetailOrderan)
     private readonly detailOrderanRepository: Repository<DetailOrderan>,
+    @InjectRepository(Menu)
+    private readonly menuRepository: Repository<Menu>,
   ) {}
+
+  // async create(
+  //   createOrderDto: CreateOrderDto,
+  //   gambarTransaksi: Express.Multer.File,
+  // ): Promise<Order> {
+  //   const { orderan, ...orderData } = createOrderDto;
+
+  //   if (gambarTransaksi) {
+  //     // Example: save the file path or URL to the orderData
+  //     orderData.gambarTransaksi = gambarTransaksi.filename; // Adjust based on your storage solution
+  //   }
+
+  //   // Create the order entity
+  //   const order = this.orderRepository.create(orderData);
+
+  //   // Create the detail orderan entities
+  //   const detailOrderanEntities = await Promise.all(
+  //     orderan.map(async (detail) => {
+  //       const detailOrderan = this.detailOrderanRepository.create(detail);
+  //       detailOrderan.order = order; // Set the order reference
+
+  //       // Fetch the menu with topings
+  //       const menu = await this.menuRepository.findOne({
+  //         where: { id: detail.menuId },
+  //         relations: ['topings'],
+  //       });
+
+  //       if (menu) {
+  //         detailOrderan.menu = menu; // Set the menu reference with topings
+  //       }
+
+  //       return detailOrderan;
+  //     }),
+  //   );
+
+  //   // Save the order and detail orderan entities
+  //   await this.orderRepository.save(order);
+  //   await this.detailOrderanRepository.save(detailOrderanEntities);
+
+  //   // Return the saved order with detail orderan
+  //   return this.orderRepository.findOne({
+  //     where: { id: order.id },
+  //     relations: ['orderan', 'orderan.menu.topings'],
+  //   });
+  // }
 
   async create(
     createOrderDto: CreateOrderDto,

@@ -9,11 +9,12 @@ import * as multer from 'multer';
 import { extname, join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppGateway } from 'src/app.gateway';
+import { Menu } from 'src/menu/menu.entity';
 // import { WebSocketGatewayService } from '../websocket.gateway';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order, DetailOrderan]),
+    TypeOrmModule.forFeature([Order, DetailOrderan, Menu]),
     MulterModule.register({
       storage: multer.diskStorage({
         destination: './file-transaksi',
