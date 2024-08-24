@@ -2,14 +2,12 @@ import {
   WebSocketGateway,
   SubscribeMessage,
   MessageBody,
-  WsResponse,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Injectable } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { pusher } from './pusher.config';
-import { Order } from './order/order.entity';
 
 @Injectable()
 @WebSocketGateway({

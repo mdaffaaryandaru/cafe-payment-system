@@ -42,9 +42,6 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
-# Ignore pusher configuration file
-src/pusher.config.ts
-
 # temp directory
 .temp
 .tmp
