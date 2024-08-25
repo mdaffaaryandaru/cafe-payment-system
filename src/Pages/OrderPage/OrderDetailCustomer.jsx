@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { get } from '../../utils/api'
+import Pusher from 'pusher-js';
+import ringtoneChat from '../../Assets/livechat-129007.mp3';
 
 const OrderDetailCustomer = () => {
     const { id, namaPelanggan } = useParams()
@@ -9,6 +11,8 @@ const OrderDetailCustomer = () => {
     const [dataOrderan, setDataOrderan] = useState([])
     const [dataMenu, setDataMenu] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+
+    const audioRef = useRef(new Audio(ringtoneChat));
 
     const fetchOrderById = async() => {
         try {
@@ -28,6 +32,55 @@ const OrderDetailCustomer = () => {
           console.log(e);
         }
     }
+
+    const loadAudio = () => {
+        return new Promise((resolve, reject) => {
+            const audio = new Audio(ringtoneChat); // Path ke file audio
+            audio.preload = 'auto';
+        
+            audio.oncanplaythrough = () => {
+                audioRef.current = audio;
+                resolve();
+            };
+        
+            audio.onerror = (error) => {
+                reject(new Error('Failed to load audio'));
+            };
+        });
+    };
+  
+    const playAudio = () => {
+        if (audioRef.current) {
+            audioRef.current.play().catch(error => {
+                console.error('Error playing ringtone:', error);
+            });
+        }
+    };
+
+    useEffect(() => {
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+    
+        // Initialize Pusher
+        const pusher = new Pusher('eeac291f5408aa1cf514', {
+          cluster: 'ap1',
+        });
+    
+        // Subscribe to the channel
+        const channel = pusher.subscribe('my-channel');
+    
+        // Bind to the event
+        channel.bind('my-event', (data) => {
+          if(data.message.statusPesanan === 'Pesanan selesai' && data.message.id === id) { 
+            playAudio()
+          }
+        });
+    
+        // Cleanup on component unmount
+        return () => {
+          pusher.unsubscribe('my-channel');
+        };
+      }, []);
 
     useEffect(() => {
         fetchOrderById()

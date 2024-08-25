@@ -51,7 +51,7 @@ const DetailOrderanPelanggan = () => {
 
         try {
             await put(`/order/update-order/${id}`, formDataUpdate)
-            navigate('/orderan-pelanggan')
+            navigate('/detail-orderan-pelanggan')
         } catch (error) {
             console.error(error)
         }
@@ -60,7 +60,7 @@ const DetailOrderanPelanggan = () => {
 
 
     return (
-        <section className='relative container px-8 -z-20'>
+        <section className='relative container px-8 z-20'>
             <h1 className='text-2xl lg:text-4xl font-bold my-5'>Detail Orderan</h1>
             <div className={`w-full flex justify-between items-center mb-8 rounded ${currTheme == 'light' ? 'bg-slate-100' : 'bg-slate-800'} p-2`}>
                 <div className="">

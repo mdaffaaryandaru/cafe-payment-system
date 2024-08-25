@@ -1,6 +1,6 @@
 import { Box, IconButton, useTheme } from "@mui/material";
 import { useContext, useEffect, useRef, useState } from "react";
-import { ColorModeContext, tokens } from "../../theme";
+import { ColorModeContext } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
@@ -10,43 +10,9 @@ import ringtoneChat from '../../Assets/livechat-129007.mp3';
 import Pusher from 'pusher-js';
 import { Link } from "react-router-dom";
 
-const dataNotification = [
-  {
-    id: 1,
-    noMeja: 3,
-    namaPelanggan: "Budi",
-  },
-  {
-    id: 2,
-    noMeja: 1,
-    namaPelanggan: "Budiarto",
-  },
-  {
-    id: 3,
-    noMeja: 1,
-    namaPelanggan: "Budiarto",
-  },
-  {
-    id: 4,
-    noMeja: 1,
-    namaPelanggan: "Budiarto",
-  },
-  {
-    id: 5,
-    noMeja: 1,
-    namaPelanggan: "Budiarto",
-  }, 
-  {
-    id: 6,
-    noMeja: 1,
-    namaPelanggan: "Budiarto",
-  }
-]
-
 const Topbar = () => {
   const [message, setMessage] = useState([]);
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
   const [isOpened, setIsOpened] = useState(true);
@@ -93,7 +59,8 @@ const Topbar = () => {
     channel.bind('my-event', (data) => {
       setIsOpened(false);
       alert(JSON.stringify(data));
-      setMessage(curr => [JSON.stringify(data), ...curr]);
+      console.log(data.message);
+      setMessage(curr => [data.message, ...curr]);
     });
 
     // Cleanup on component unmount
@@ -127,22 +94,25 @@ const Topbar = () => {
           {!isOpened && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></div>}
           <NotificationsOutlinedIcon />
           <div className='absolute top-8 p-2 right-0 w-64 invisible group-hover:visible rounded bg-white shadow-md'>
-            <ul className="z-auto">
-              {message.slice(0, 3).map((notif, i) => (
-                <li key={i} className="w-full py-1 px-2 hover:bg-slate-200">
-                  <Link to={`/detail-orderan-pelanggan/${notif.id}`}>
-                      <div className="flex justify-between items-center">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-base text-black">Pesanan Baru</span>
-                          <span className="text-gray-700">{notif.namaPelanggan}</span>
+            {message.length > 0 ?
+              <ul className="z-auto">
+                {message.slice(0, 3).map((notif, i) => (
+                  <li key={i} className="w-full py-1 px-2 hover:bg-slate-200">
+                    <Link to={`/detail-orderan-pelanggan/${notif.id}`}>
+                        <div className="flex justify-between items-center">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-base text-black">Pesanan Baru</span>
+                            <span className="text-gray-700">{notif.namaPelanggan}</span>
+                          </div>
+                          <p className="text-lg font-bold text-black">{notif.noMeja}</p>
                         </div>
-                        <p className="text-lg font-bold text-black">{notif.noMeja}</p>
-                      </div>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            : <p className="text-center text-black">Tidak ada notifikasi</p>
+          }
+        </div>
         </div>
         <IconButton>
           <SettingsOutlinedIcon />
