@@ -60,7 +60,7 @@ const DetailOrderanPelanggan = () => {
 
 
     return (
-        <section className='relative container px-8'>
+        <section className='relative container px-8 -z-20'>
             <h1 className='text-2xl lg:text-4xl font-bold my-5'>Detail Orderan</h1>
             <div className={`w-full flex justify-between items-center mb-8 rounded ${currTheme == 'light' ? 'bg-slate-100' : 'bg-slate-800'} p-2`}>
                 <div className="">
@@ -75,7 +75,7 @@ const DetailOrderanPelanggan = () => {
                         const menu = dataMenu.find((menu) => menu.id === item.menuId)
                         if (menu) return (
                             <div key={i} className={`flex rounded gap-3 ${currTheme == 'light' ? 'bg-slate-100' : 'bg-slate-800'} p-2`}>
-                                <img className='w-20 h-20 object-cover rounded aspect-square' src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
+                                <img className='w-20 h-20 object-cover rounded aspect-square' src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
                                 <div className="w-full flex flex-col justify-between">
                                     <div className="">
                                         <h5 className='text-lg font-bold'>{menu.namaMenu}</h5>
@@ -108,7 +108,7 @@ const DetailOrderanPelanggan = () => {
                                 <div className={`fixed z-auto top-0 left-0 flex justify-center items-center w-full h-screen ${currTheme == 'light' ? 'bg-white' : 'bg-black/60'}`}>
                                     <div className="h-[80%]">
                                         <button type='button' className='w-full text-right font-bold' onClick={() => setOpenImage(false)}>Close</button>
-                                        <img className='h-full' src={`http://192.168.18.217:3000/order/images/${dataOrder.gambarTransaksi}`} alt={dataOrder.namaPelanggan} />
+                                        <img className='h-full' src={`${process.env.REACT_APP_BASE_URL_API}/order/images/${dataOrder.gambarTransaksi}`} alt={dataOrder.namaPelanggan} />
                                     </div>
                                 </div>
                             )}

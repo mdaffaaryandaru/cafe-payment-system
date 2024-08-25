@@ -181,7 +181,6 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
                   name="hargaMenu"
                   onChange={handleOnChange}
                 />
-
               </div>
               <div className="h-full overflow-y-auto">
                 <div className="flex justify-between items-center">
@@ -190,7 +189,7 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
                 </div>
                 <Box component="form" onSubmit={handleSubmit}>
                   {toppingFields.map((field, index) => (
-                    <div className="w-full h-full grid grid-cols-[1fr_1fr_26px] gap-4 justify-center items-center">
+                    <div key={index} className="w-full h-full grid grid-cols-[1fr_1fr_26px] gap-4 justify-center items-center">
                       <TextField required label="Nama Topping" name="namaToping" color="secondary" value={field.namaToping} onChange={(e) => handleToppingChange(index, e)} sx={{ marginRight: '1rem', width: 'calc(50% - 1rem)' }}/>
                       <TextField required label="Harga Topping" type="number" name="hargaToping" color="secondary" value={field.hargaToping} onChange={(e) => handleToppingChange(index, e)} sx={{ width: 'calc(50% - 1rem)' }}
                       />

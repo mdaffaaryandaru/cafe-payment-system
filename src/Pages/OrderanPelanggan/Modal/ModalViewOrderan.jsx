@@ -93,7 +93,7 @@ const ModalViewOrderan = ({ setDataForm, dataItem, handleOnSubmit }) => {
                   const menu = dataMenu.find((menu) => menu.id === item.menuId);
                   if(menu) return (
                     <div key={i} className="flex gap-3 bg-slate-800 p-2">
-                        <img className='w-16 h-16 object-cover rounded aspect-square' src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
+                        <img className='w-16 h-16 object-cover rounded aspect-square' src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
                         <div className="w-full flex flex-col justify-between">
                             <div className="">
                                 <h5 className='text-lg font-bold'>{menu.namaMenu}</h5>
@@ -116,7 +116,7 @@ const ModalViewOrderan = ({ setDataForm, dataItem, handleOnSubmit }) => {
             <div className="">
               <div className="">
                 <p>Bukti Pembayaran</p>
-                <img className=" aspect-square object-contain" src={`http://192.168.18.217:3000/order/images/${data.gambarTransaksi}`} alt="" />
+                <img className=" aspect-square object-contain" src={`${process.env.REACT_APP_BASE_URL_API}/order/images/${data.gambarTransaksi}`} alt="" />
               </div>
             </div>
           </div>

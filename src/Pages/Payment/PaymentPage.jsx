@@ -168,7 +168,7 @@ const PaymentPage = () => {
                         const menu = dataMenu.find((menu) => menu.id === item.menuId)
                         return (
                             <div key={i} className="flex gap-3 bg-slate-800 p-2">
-                                <img className='w-20 h-20 object-cover rounded aspect-square' src={`http://192.168.18.217:3000/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
+                                <img className='w-20 h-20 object-cover rounded aspect-square' src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
                                 <div className="w-full flex flex-col justify-between">
                                     <div className="">
                                         <h5 className='text-lg font-bold'>{menu.namaMenu}</h5>

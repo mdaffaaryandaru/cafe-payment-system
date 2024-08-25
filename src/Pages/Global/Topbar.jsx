@@ -1,14 +1,47 @@
 import { Box, IconButton, useTheme } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ColorModeContext, tokens } from "../../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import { io } from "socket.io-client";
-import { ContextNotification } from "../../Components/ContextNotification/ContextNotification";
+import ringtoneChat from '../../Assets/livechat-129007.mp3';
 import Pusher from 'pusher-js';
+import { Link } from "react-router-dom";
+
+const dataNotification = [
+  {
+    id: 1,
+    noMeja: 3,
+    namaPelanggan: "Budi",
+  },
+  {
+    id: 2,
+    noMeja: 1,
+    namaPelanggan: "Budiarto",
+  },
+  {
+    id: 3,
+    noMeja: 1,
+    namaPelanggan: "Budiarto",
+  },
+  {
+    id: 4,
+    noMeja: 1,
+    namaPelanggan: "Budiarto",
+  },
+  {
+    id: 5,
+    noMeja: 1,
+    namaPelanggan: "Budiarto",
+  }, 
+  {
+    id: 6,
+    noMeja: 1,
+    namaPelanggan: "Budiarto",
+  }
+]
 
 const Topbar = () => {
   const [message, setMessage] = useState([]);
@@ -16,7 +49,33 @@ const Topbar = () => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  const {notif} = useContext(ContextNotification)
+  const [isOpened, setIsOpened] = useState(true);
+
+  const audioRef = useRef(new Audio(ringtoneChat));
+
+  const loadAudio = () => {
+      return new Promise((resolve, reject) => {
+          const audio = new Audio(ringtoneChat); // Path ke file audio
+          audio.preload = 'auto';
+      
+          audio.oncanplaythrough = () => {
+              audioRef.current = audio;
+              resolve();
+          };
+      
+          audio.onerror = (error) => {
+              reject(new Error('Failed to load audio'));
+          };
+      });
+  };
+
+  const playAudio = () => {
+      if (audioRef.current) {
+          audioRef.current.play().catch(error => {
+              console.error('Error playing ringtone:', error);
+          });
+      }
+  };
 
   useEffect(() => {
     // Enable pusher logging - don't include this in production
@@ -32,8 +91,9 @@ const Topbar = () => {
 
     // Bind to the event
     channel.bind('my-event', (data) => {
-      alert(data)
-      setMessage(curr => [...curr, JSON.stringify(data)]);
+      setIsOpened(false);
+      alert(JSON.stringify(data));
+      setMessage(curr => [JSON.stringify(data), ...curr]);
     });
 
     // Cleanup on component unmount
@@ -42,21 +102,19 @@ const Topbar = () => {
     };
   }, []);
 
+  const handleOpenNotification = () => {
+    setIsOpened(true);
+  }
+
+  useEffect(() => {
+    loadAudio()
+    if (message.length > 0) {
+        playAudio();
+    }
+  }, [message]);
+
   return (
     <Box display="flex" justifyContent="end" p={2}>
-      {/* SEARCH BAR */}
-      {/* <Box
-        display="flex"
-        backgroundColor={colors.primary[400]}
-        borderRadius="3px"
-      >
-        <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
-        <IconButton type="button" sx={{ p: 1 }}>
-          <SearchIcon />
-        </IconButton>
-      </Box> */}
-
-      {/* ICONS */}
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
@@ -65,12 +123,25 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <div className="p-2 relative group">
+        <div className="p-2 relative group" onClick={handleOpenNotification}>
+          {!isOpened && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></div>}
           <NotificationsOutlinedIcon />
-          <div className="absolute top-8 p-2 right-0 w-52 max-h-32 invisible group-hover:visible rounded bg-slate-700">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="p-1 hover:bg-slate-800">Notifikasi {i}</div>
-            ))}
+          <div className='absolute top-8 p-2 right-0 w-64 invisible group-hover:visible rounded bg-white shadow-md'>
+            <ul className="z-auto">
+              {message.slice(0, 3).map((notif, i) => (
+                <li key={i} className="w-full py-1 px-2 hover:bg-slate-200">
+                  <Link to={`/detail-orderan-pelanggan/${notif.id}`}>
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-base text-black">Pesanan Baru</span>
+                          <span className="text-gray-700">{notif.namaPelanggan}</span>
+                        </div>
+                        <p className="text-lg font-bold text-black">{notif.noMeja}</p>
+                      </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
         <IconButton>
