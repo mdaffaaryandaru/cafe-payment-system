@@ -34,6 +34,9 @@ export class DetailOrderan {
   @Column()
   harga: number;
 
+  @Column('simple-array', { nullable: true })
+  topping: string[];
+
   @CreateDateColumn()
   createdDate: Date;
 }

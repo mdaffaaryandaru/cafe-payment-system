@@ -146,7 +146,10 @@ export class OrderController {
     if (gambarTransaksi) order.gambarTransaksi = gambarTransaksi.filename;
 
     const updatedOrder = await this.orderService.update(order);
-    // this.appGateway.sendOrderNotification(updatedOrder);
+    if (updateOrderDto.statusPesanan === 'Pesananan Selesai') {
+      this.appGateway.handleMessageCustomer(updatedOrder);
+    }
+
     return updatedOrder;
   }
   @Get('images/:gambarTransaksi')

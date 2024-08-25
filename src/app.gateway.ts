@@ -27,4 +27,11 @@ export class AppGateway {
       message: order,
     });
   }
+
+  @SubscribeMessage('orderNotificationCustomer')
+  handleMessageCustomer(@MessageBody() order: any) {
+    pusher.trigger('my-channel', 'my-event', {
+      message: order,
+    });
+  }
 }

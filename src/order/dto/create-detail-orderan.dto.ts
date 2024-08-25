@@ -1,4 +1,4 @@
-import { IsNumber } from 'class-validator';
+import { IsArray, IsNumber } from 'class-validator';
 
 export class CreateDetailOrderanDto {
   @IsNumber()
@@ -12,4 +12,7 @@ export class CreateDetailOrderanDto {
 
   @IsNumber()
   harga: number;
+
+  @IsArray()
+  topping: string[];
 }
