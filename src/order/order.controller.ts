@@ -146,7 +146,7 @@ export class OrderController {
     if (gambarTransaksi) order.gambarTransaksi = gambarTransaksi.filename;
 
     const updatedOrder = await this.orderService.update(order);
-    if (updateOrderDto.statusPesanan === 'Pesananan Selesai') {
+    if (updateOrderDto.statusPesanan === 'Pesanan selesai') {
       this.appGateway.handleMessageCustomer(updatedOrder);
     }
 
