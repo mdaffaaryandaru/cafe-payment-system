@@ -67,6 +67,9 @@ export class MenuController {
     @Body() createMenuDto: CreateMenuDto,
   ): Promise<Menu> {
     try {
+      console.log('Incoming createMenuDto:', createMenuDto);
+      console.log('Incoming gambarMenu:', gambarMenu);
+
       if (gambarMenu) {
         createMenuDto.gambarMenu = gambarMenu.filename;
       }
@@ -78,8 +81,11 @@ export class MenuController {
       ) {
         throw new BadRequestException('Missing required fields');
       }
-      return await this.menuService.createMenu(createMenuDto);
+      const createdMenu = await this.menuService.createMenu(createMenuDto);
+      console.log('Created menu:', createdMenu);
+      return createdMenu;
     } catch (error) {
+      console.error('Error creating menu:', error);
       throw new BadRequestException('Error creating menu');
     }
   }

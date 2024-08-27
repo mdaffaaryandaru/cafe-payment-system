@@ -40,16 +40,14 @@ export class MenuService {
 
     const savedMenu = await this.menuRepository.save(menu);
 
-    // Ensure the topings are correctly associated with the menu
-    if (menu.topings.length > 0) {
-      savedMenu.topings = await this.topingRepository.find({
-        where: { menu: savedMenu },
-      });
-    }
+    // Fetch the menu with its topings relations
+    const menuWithTopings = await this.menuRepository.findOne({
+      where: { id: savedMenu.id },
+      relations: ['topings'],
+    });
 
-    return savedMenu;
+    return menuWithTopings;
   }
-
   findAllMenu(): Promise<Menu[]> {
     return this.menuRepository.find({ relations: ['topings'] });
   }
