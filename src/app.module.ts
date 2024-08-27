@@ -35,6 +35,21 @@ import { Toping } from './toping/entities/toping.entity';
       }),
       inject: [ConfigService],
     }),
+    // TypeOrmModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   useFactory: (configService: ConfigService): TypeOrmModule => ({
+    //     type: 'mysql', // Set the database type to MySQL
+    //     host: '127.0.0.1', // Set the host to localhost for local MySQL
+    //     port: 3306, // Default MySQL port
+    //     username: 'root', // Your MySQL username
+    //     password: '', // Your MySQL password
+    //     database: 'seruni_database', // Your MySQL database name
+    //     entities: [Menu, Pegawai, Order, DetailOrderan, Toping],
+    //     synchronize: true,
+    //     ssl: false, // Disable SSL for local MySQL
+    //   }),
+    //   inject: [ConfigService],
+    // }),
     MenuModule,
     PegawaiModule,
     OrderModule,

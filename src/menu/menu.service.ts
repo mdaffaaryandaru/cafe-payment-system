@@ -38,8 +38,18 @@ export class MenuService {
       menu.topings = []; // Ensure topings is an empty array if none are provided
     }
 
-    return this.menuRepository.save(menu);
+    const savedMenu = await this.menuRepository.save(menu);
+
+    // Ensure the topings are correctly associated with the menu
+    if (menu.topings.length > 0) {
+      savedMenu.topings = await this.topingRepository.find({
+        where: { menu: savedMenu },
+      });
+    }
+
+    return savedMenu;
   }
+
   findAllMenu(): Promise<Menu[]> {
     return this.menuRepository.find({ relations: ['topings'] });
   }
@@ -89,12 +99,20 @@ export class MenuService {
 
     const savedMenu = await this.menuRepository.save(menu);
 
-    savedMenu.topings = savedMenu.topings.map((toping) => {
-      const { menu, ...topingWithoutMenu } = toping;
-      return topingWithoutMenu;
+    // Ensure the topings are correctly associated with the menu
+    if (menu.topings.length > 0) {
+      savedMenu.topings = await this.topingRepository.find({
+        where: { menu: savedMenu },
+      });
+    }
+
+    // Reload the menu to ensure all relations are loaded
+    const updatedMenu = await this.menuRepository.findOne({
+      where: { id: savedMenu.id },
+      relations: ['topings'],
     });
 
-    return savedMenu;
+    return updatedMenu;
   }
 
   //!Belum Delete Bersama Toping
