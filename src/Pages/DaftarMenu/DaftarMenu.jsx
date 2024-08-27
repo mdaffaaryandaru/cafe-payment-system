@@ -84,8 +84,8 @@ const DaftarMenu = () => {
     newFormData.append("kategoriMenu", formData.kategoriMenu);
     newFormData.append("hargaMenu", formData.hargaMenu);
 
-    if(formData.topings > 0) {
-      console.log('masuk sini')
+    if (formData.topings > 0) {
+      console.log("masuk sini");
       formData.topings.map((topping, index) => {
         Object.entries(topping).map(([key, value]) => {
           console.log(`topings[${index}][${key}]`, value);
@@ -126,12 +126,18 @@ const DaftarMenu = () => {
     newFormData.append("kategoriMenu", formDataEdit.kategoriMenu);
     newFormData.append("hargaMenu", formDataEdit.hargaMenu);
 
-    // try {
-    //   await putWithImage(`/menu/edit-menu/${id}`, newFormData);
-    // } catch (error) {
-    //   console.error("Error deleting item:", error);
-    // }
-    // fetchItems();
+    // Append toppings to the FormData
+    formDataEdit.topings.forEach((toping, index) => {
+      newFormData.append(`topings[${index}][namaToping]`, toping.namaToping);
+      newFormData.append(`topings[${index}][hargaToping]`, toping.hargaToping);
+    });
+
+    try {
+      await putWithImage(`/menu/edit-menu/${id}`, newFormData);
+    } catch (error) {
+      console.error("Error editing item:", error);
+    }
+    fetchItems();
   };
 
   const handleSelectionModelChange = (newSelection) => {
