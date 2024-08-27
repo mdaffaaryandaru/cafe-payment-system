@@ -297,22 +297,22 @@ const OrderPage = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-[90vh] p-6 xl:p-10 max-md:overflow-hidden max-md:relative xl:grid xl:grid-cols-[1.5fr_1fr]">
+      <div className="w-full h-[90vh] p-6 xl:p-10 max-md:overflow-y-scroll max-md:overflow-x-hidden max-md:relative xl:grid xl:grid-cols-[1.5fr_1fr]">
         <div className="xl:me-10">
-          <ul className="grid w-full gap-6 md:grid-cols-3 mb-3">
-            <li>
+          <ul className="flex gap-4 mb-3">
+            <li className="w-max">
                 <input type="checkbox" id="react-option" name="category" value="Semua" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Semua'}/>
                 <label htmlFor="react-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
                   Semua
                 </label>
             </li>
-            <li>
+            <li className="w-max">
                 <input type="checkbox" id="flowbite-option" name="category" value="Makanan" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Makanan'}/>
                 <label htmlFor="flowbite-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                   Makanan
                 </label>
             </li> 
-            <li>
+            <li className="w-max">
                 <input type="checkbox" id="angular-option" name="category" value="Minuman" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Minuman'}/>
                 <label htmlFor="angular-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                   Minuman
@@ -325,8 +325,11 @@ const OrderPage = () => {
             ))}
           </div>
         </div>
-        <div className={`bg-slate-100 text-black p-4 max-md:absolute max-md:z-50 max-md:top-0 max-md:left-0 max-md:w-screen ${openSidebar ? "max-md:translate-x-0" : "max-md:translate-x-full "} max-md:transition-all max-md:duration-300 max-md:shadow-lg xl:block`}>
-          <h1 className="text-2xl font-bold mb-2">Detail Orderan</h1>
+        <div className={`bg-slate-100 text-black p-4 max-md:fixed max-md:z-50 max-md:top-0 max-md:left-0 max-md:w-screen max-md:h-screen max-md:overflow-y-scroll ${openSidebar ? "max-md:translate-x-0" : "max-md:translate-x-full "} max-md:transition-all max-md:duration-300 max-md:shadow-lg xl:block`}>
+          <div className="w-full flex justify-between">
+            <h1 className="text-2xl font-bold mb-2">Detail Orderan</h1>
+            <button type="button" className="w-6 h-6 rounded bg-slate-200 flex justify-center items-center" onClick={() => setOpenSidebar(false)}>x</button>
+          </div>
           <div className="rounded">
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-[1.5fr_1fr] gap-5">
