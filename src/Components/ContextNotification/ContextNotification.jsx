@@ -12,11 +12,6 @@ const ProviderNotification = ({ children }) => {
         setNotif(prev => [...prev, newData])
     };
 
-    useEffect(() => {
-        console.log('perubahan')
-        console.log(notif)
-    }, [notif])
-
     return (
         <ContextNotification.Provider value={{ notif, addNotif }}>
             { children }

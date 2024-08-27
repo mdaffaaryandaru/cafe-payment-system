@@ -12,6 +12,8 @@ const OrderDetailCustomer = () => {
     const [dataMenu, setDataMenu] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
+    const [currStatus, setCurrStatus] = useState('')
+
     const audioRef = useRef(new Audio(ringtoneChat));
 
     const fetchOrderById = async() => {
@@ -67,18 +69,21 @@ const OrderDetailCustomer = () => {
         });
     
         // Subscribe to the channel
-        const channel = pusher.subscribe('my-channel');
+        const channel = pusher.subscribe('my-channel-customer');
     
         // Bind to the event
-        channel.bind('my-event', (data) => {
-          if(data.message.statusPesanan === 'Pesanan selesai' && data.message.id === id) { 
-            playAudio()
-          }
+        channel.bind('my-event-customer', (data) => {
+            loadAudio()
+            if(data.message.id == id) { 
+                setCurrStatus(data.message);
+                alert('Pesanan Anda selesai')
+                playAudio()
+            }
         });
     
         // Cleanup on component unmount
         return () => {
-          pusher.unsubscribe('my-channel');
+          pusher.unsubscribe('my-channel-customer');
         };
       }, []);
 
@@ -97,8 +102,8 @@ const OrderDetailCustomer = () => {
                 <h1 className="text-2xl font-bold py-6 text-center">Resi Pesanan</h1>
                 <h2 className='text-xl py-3 bg-green-500 text-center rounded font-bold'>Pesanan Berhasil</h2>
                 <p className='py-2'>Terima Kasih telah order makanan maupun minuman di tempat kami, untuk pesanan Anda bisa dilihat statusnya.</p>
-                <div className="border border-yellow-400 bg-yellow-300/20 p-3 rounded my-4">
-                    <span>{dataOrder.statusPesanan}</span>
+                <div className={`border ${currStatus == 'Pesanan selesai' || dataOrder.statusPesanan == 'Pesanan selesai' ? 'border-green-400 bg-green-300/20' : 'border-yellow-400 bg-yellow-300/20'} p-3 rounded my-4`}>
+                    <span>{currStatus == 'Pesanan selesai' ? currStatus : dataOrder.statusPesanan}</span>
                 </div>
                 <div className="bg-slate-900 flex flex-col gap-3 rounded p-3">
                     <h4 className='text-lg'>Pesananmu</h4>

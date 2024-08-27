@@ -58,7 +58,7 @@ const Topbar = () => {
     // Bind to the event
     channel.bind('my-event', (data) => {
       setIsOpened(false);
-      alert(JSON.stringify(data));
+      alert('Pesanan baru masuk');
       console.log(data.message);
       setMessage(curr => [data.message, ...curr]);
     });
@@ -93,7 +93,7 @@ const Topbar = () => {
         <div className="p-2 relative group" onClick={handleOpenNotification}>
           {!isOpened && <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></div>}
           <NotificationsOutlinedIcon />
-          <div className='absolute top-8 p-2 right-0 w-64 invisible group-hover:visible rounded bg-white shadow-md'>
+          <div className='absolute top-8 p-2 z-50 right-0 w-64 invisible group-hover:visible rounded bg-white shadow-md'>
             {message.length > 0 ?
               <ul className="z-auto">
                 {message.slice(0, 3).map((notif, i) => (

@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { CirclePlus } from 'lucide-react'
 
-const CardMenu = ({ itemCategory, handleSelectMenu, handleSelectToping }) => {
+const CardMenu = ({ itemCategory, handleSelectMenu, handleSelectToping, dataTopings }) => {
     const [selectedToppings, setSelectedToppings] = useState([]);
-    const handleCheckboxChange = (menuId, toppingName) => {
-        setSelectedToppings((prevSelectedToppings) => {
-          // Jika topping sudah ada dalam daftar, hapus dari daftar
-          if (prevSelectedToppings.includes(toppingName)) {
-            return prevSelectedToppings.filter(topping => topping !== toppingName);
-          } 
-
-          handleSelectToping(menuId, toppingName)
-
-          // Jika topping belum ada dalam daftar, tambahkan ke daftar
-          return [...prevSelectedToppings, toppingName];
-        });
-    };
+    
 
     useEffect(() => {
-        console.log(selectedToppings);
-    }, [selectedToppings]);
+        setSelectedToppings(dataTopings);
+    }, [dataTopings]);
 
 
     return (
@@ -48,27 +36,29 @@ const CardMenu = ({ itemCategory, handleSelectMenu, handleSelectToping }) => {
                         </div>
                         {/* Toping */}
                         <div className="w-full flex flex-col gap-2">
-                            {menu.topings.map((toping, i) => (
-                                <div key={i} className="flex justify-between items-center">
-                                    <label className="flex items-center gap-2">
-                                        {/* Checkbox input */}
-                                        <input
-                                        type="checkbox"
-                                        checked={selectedToppings.includes(toping.namaToping)}
-                                        onChange={() => handleSelectToping(menu.id, toping.namaToping)}
-                                        />
-                                        {/* Topping name */}
-                                        <span>{toping.namaToping}</span>
-                                    </label>
-                                    {/* Topping price */}
-                                    <span>
-                                        {Number(toping.hargaToping).toLocaleString("id-ID", {
-                                        style: "currency",
-                                        currency: "IDR",
-                                        })}
-                                    </span>
-                                </div>
-                            ))}
+                            {menu.topings.map((toping, i) => {
+                                return (
+                                    <div key={i} className="flex justify-between items-center">
+                                        <label className="flex items-center gap-2">
+                                            {/* Checkbox input */}
+                                            <input
+                                            type="checkbox"
+                                            checked={selectedToppings.menuId === menu.id && selectedToppings.topings.includes(toping.namaToping)}
+                                            onChange={() => handleSelectToping(menu.id, toping.namaToping)}
+                                            />
+                                            {/* Topping name */}
+                                            <span>{toping.namaToping}</span>
+                                        </label>
+                                        {/* Topping price */}
+                                        <span>
+                                            {Number(toping.hargaToping).toLocaleString("id-ID", {
+                                            style: "currency",
+                                            currency: "IDR",
+                                            })}
+                                        </span>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 ))}

@@ -113,9 +113,12 @@ const Dashboard = () => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [menuLowStock, setMenuLowStock] = useState([]);
 
-  const { labels, totals} = processWeeklyData(dataOrder);
+  const [currTheme, setCurrTheme] = useState('')
+  useEffect(() => {
+      setCurrTheme(theme.palette.mode)
+  }, [theme])
 
-  console.log(labels, totals);
+  const { labels, totals} = processWeeklyData(dataOrder);
 
   const data = {
     labels: labels, // Label sumbu x
@@ -200,17 +203,17 @@ const Dashboard = () => {
       </Box>
       <div className="w-full">
         <div className="w-full grid grid-cols-3 gap-5">
-          <div className="w-full bg-slate-800 p-3">
+          <div className={`w-full ${currTheme == 'light' ? 'bg-slate-100 shadow' : 'bg-slate-800'} rounded-lg p-3`}>
             <p className="text-base">Total Pemasukan <span className="text-xs">(per minggu)</span></p>
             <h1 className="text-3xl font-bold">{Number(totalIncome).toLocaleString('id-ID', { style: "currency", currency: "IDR"})}</h1>
             <Line className="mt-2" data={data} options={options} />
           </div>
-          <div className="w-full h-full bg-slate-800 p-3">
+          <div className={`w-full h-full ${currTheme == 'light' ? 'bg-slate-100 shadow' : 'bg-slate-800'} rounded-lg p-3`}>
             <h1 className="text-3xl font-bold">Stok Menipis</h1>
             <p>Stok yang sedang menipis</p>
             <div className="w-full h-full justify-center items-center py-3 flex flex-col gap-2">
               {menuLowStock ? menuLowStock.map((item, i) => (
-                <div key={i} className="w-full flex justify-between items-center py-3 px-2 text-base rounded bg-slate-700">
+                <div key={i} className={`w-full flex justify-between items-center py-3 px-2 text-base rounded ${currTheme == 'light' ? 'bg-slate-200' : 'bg-slate-700'}`}>
                   <p>{item.namaMenu}</p>
                   <p className="font-bold">{item.stokMenu}</p>
                 </div>
@@ -223,12 +226,12 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="w-full h-full grid grid-rows-2 gap-4">
-            <div className="bg-slate-800 p-3">
+            <div className={`${currTheme == 'light' ? 'bg-slate-100 shadow' : 'bg-slate-800'} rounded-lg p-3`}>
               <h1 className="text-base">Total Pembelian</h1>
               <br />
               <h1 className="text-5xl font-bold">{dataOrder.length}</h1>
             </div>
-            <div className="bg-slate-800 p-3">
+            <div className={`${currTheme == 'light' ? 'bg-slate-100 shadow' : 'bg-slate-800'} rounded-lg p-3`}>
               <h1 className="text-base">Pesanan Pending</h1>
               <br />
               <h1 className="text-5xl font-bold">{dataOrder.filter(item => item.statusPesanan === 'Pesanan diterima ke kasir').length}</h1>
