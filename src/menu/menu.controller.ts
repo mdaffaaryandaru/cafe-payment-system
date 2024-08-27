@@ -74,8 +74,7 @@ export class MenuController {
         !createMenuDto.namaMenu ||
         !createMenuDto.stokMenu ||
         !createMenuDto.kategoriMenu ||
-        !createMenuDto.hargaMenu ||
-        !createMenuDto.topings
+        !createMenuDto.hargaMenu
       ) {
         throw new BadRequestException('Missing required fields');
       }
