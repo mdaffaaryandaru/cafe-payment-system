@@ -34,6 +34,8 @@ export class MenuService {
         }),
       );
       menu.topings = topingEntities;
+    } else {
+      menu.topings = [];
     }
 
     return this.menuRepository.save(menu);
@@ -83,6 +85,8 @@ export class MenuService {
       await this.topingRepository.remove(topingsToRemove);
 
       menu.topings = updatedTopings;
+    } else {
+      menu.topings = [];
     }
 
     const savedMenu = await this.menuRepository.save(menu);

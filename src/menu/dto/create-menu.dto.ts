@@ -46,5 +46,6 @@ export class CreateMenuDto {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreateTopingDto)
+  @ApiProperty({ type: [CreateTopingDto], default: [] })
   topings: CreateTopingDto[];
 }
