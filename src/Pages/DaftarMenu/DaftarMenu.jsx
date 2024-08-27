@@ -76,18 +76,23 @@ const DaftarMenu = () => {
 
     const newFormData = new FormData();
 
+    console.log(formData);
+
     newFormData.append("gambarMenu", formData.gambarMenu);
     newFormData.append("namaMenu", formData.namaMenu);
     newFormData.append("stokMenu", formData.stokMenu);
     newFormData.append("kategoriMenu", formData.kategoriMenu);
     newFormData.append("hargaMenu", formData.hargaMenu);
 
-    formData.topings.map((topping, index) => {
-      Object.entries(topping).map(([key, value]) => {
-        console.log(`topings[${index}][${key}]`, value);
-        newFormData.append(`topings[${index}][${key}]`, value);
+    if(formData.topings > 0) {
+      console.log('masuk sini')
+      formData.topings.map((topping, index) => {
+        Object.entries(topping).map(([key, value]) => {
+          console.log(`topings[${index}][${key}]`, value);
+          newFormData.append(`topings[${index}][${key}]`, value);
+        });
       });
-    });
+    }
 
     try {
       const response = await postWithFile("/menu/create-menu", newFormData);

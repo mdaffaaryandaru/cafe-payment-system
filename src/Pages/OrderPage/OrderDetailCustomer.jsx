@@ -117,25 +117,33 @@ const OrderDetailCustomer = () => {
                         dataOrderan.map((item, i) => {
                             const menu = dataMenu.find((menu) => menu.id === item.menuId);
                             if (!menu) return null; // Menangani kasus jika menu tidak ditemukan
+                            console.log(item)
                             return (
-                                <div key={i} className="flex gap-3 bg-slate-800 p-2">
-                                    <img
-                                        className='w-16 h-16 object-cover rounded aspect-square'
-                                        src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`}
-                                        alt={menu.namaMenu}
-                                    />
-                                    <div className="w-full flex flex-col justify-between">
-                                        <div className="">
-                                            <h5 className='text-lg font-bold'>{menu.namaMenu}</h5>
-                                            <p className='text-slate-400 text-xs'>{menu.kategoriMenu}</p>
-                                        </div>
-                                        <div className="w-full flex justify-between">
-                                            <p>Jumlah: {item.jumlah}</p>
-                                            <p className='font-bold'>
-                                                {Number(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
-                                            </p>
+                                <div className="flex flex-col">
+                                    <div key={i} className="flex gap-3 bg-slate-800 p-2">
+                                        <img
+                                            className='w-16 h-16 object-cover rounded aspect-square'
+                                            src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`}
+                                            alt={menu.namaMenu}
+                                        />
+                                        <div className="w-full flex flex-col justify-between">
+                                            <div className="">
+                                                <h5 className='text-lg font-bold'>{menu.namaMenu}</h5>
+                                                <p className='text-slate-400 text-xs'>{menu.kategoriMenu}</p>
+                                            </div>
+                                            <div className="w-full flex justify-between">
+                                                <p>Jumlah: {item.jumlah}</p>
+                                                <p className='font-bold'>
+                                                    {Number(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
+                                    {item?.topings.map((toping, i) => (
+                                        <div key={i} className="flex justify-between items-center bg-slate-700 p-2">
+                                            <span>{toping}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             );
                         })

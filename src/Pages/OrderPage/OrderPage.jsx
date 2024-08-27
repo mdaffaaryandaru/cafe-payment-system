@@ -14,6 +14,10 @@ const OrderPage = () => {
   const { noMeja } = useParams();
   const [openSidebar, setOpenSidebar] = useState(false);
 
+  const [groupedData, setGroupedData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
+
   const totalHargaRef = useRef(null);
   const [dataMenu, setDataMenu] = useState([]);
   const [cart, setCart] = useState([]);
@@ -43,7 +47,7 @@ const OrderPage = () => {
 
   const fetchMenu = async () => {
     try {
-      const res = await get("/menu");
+      const res = await get("/menu")
       setDataMenu(res);
     } catch (e) {
       console.log(e);
@@ -61,7 +65,6 @@ const OrderPage = () => {
         if (storedData != null) {
           try {
             const orderJson = JSON.parse(storedData);
-            console.log(orderJson.orderan)
             setCart(orderJson.orderan);
           } catch (e) {
             console.error("Error parsing JSON from localStorage:", e);
@@ -73,6 +76,7 @@ const OrderPage = () => {
     loadCartFromLocalStorage();
   }, [dataMenu]);
 
+  // Group Berdasarkan Kategori
   const groupByCategory = () => {
     const grouped = dataMenu.reduce((acc, menu) => {
       const category = menu.kategoriMenu.trim(); // Menghapus spasi di awal/akhir kategori
@@ -90,15 +94,34 @@ const OrderPage = () => {
     return Object.values(grouped);
   };
 
+  useEffect(() => {
+    const grouped = groupByCategory(dataMenu);
+    setGroupedData(grouped);
+    setFilteredData(grouped);
+  }, []);
+
+  useEffect(() => {
+      if (selectedCategory === 'Semua') {
+          setFilteredData(groupedData);
+      } else {
+          setFilteredData(groupedData.filter(group => group.kategori === selectedCategory));
+      }
+  }, [selectedCategory, groupedData]);
+
+  const handleSelectedCategory = (e) => {
+    const { value } = e.target;
+
+    setSelectedCategory(value)
+  }
+
   const handleSelectMenu = (id) => {
     const selectedMenu = dataMenu.find((menu) => menu.id === id);
 
     if (selectedMenu) {
       setCart((prevCart) => {
         const itemIndex = prevCart.findIndex((item) => item.menuId === id);
-        console.log(itemIndex);
         if (itemIndex > -1) {
-          if( topingSelected.menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === false) {
+          if(topingSelected.menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === false) {
             console.log("masuk 1")
             return [
               ...prevCart,
@@ -144,7 +167,7 @@ const OrderPage = () => {
               menuId: selectedMenu.id,
               jumlah: 1,
               harga: Number(selectedMenu.hargaMenu),
-              topings: topingSelected.topings,
+              topings: topingSelected?.topings ?? [],
             },
           ];
         }
@@ -221,7 +244,7 @@ const OrderPage = () => {
 
     {cart.map((item, i) => {
       console.log(item)
-      if (item.topings.length > 0) {
+      if (item?.topings.length > 0) {
         const toping = item.topings.map((toping) => {
           return dataMenu.find((menu) => menu.id === item.menuId).topings.find((top) => top.namaToping === toping);
         });
@@ -237,8 +260,6 @@ const OrderPage = () => {
   useEffect(() => {
     setTotalPriceOrder(getTotalPrice());
   }, [cart])
-
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -257,7 +278,7 @@ const OrderPage = () => {
   };
 
   return (
-    <main className="min-h-screen bg-white z-50">
+    <main className="h-screen bg-white z-50 overflow-y-scroll">
       <div className="bg-slate-100 py-4">
         <div className="container flex justify-between items-center">
           <h3 className="text-2xl font-bold text-black">Seruni Kopi</h3>
@@ -276,8 +297,28 @@ const OrderPage = () => {
       </div>
       <div className="w-full h-[90vh] p-6 xl:p-10 max-md:overflow-hidden max-md:relative xl:grid xl:grid-cols-[1.5fr_1fr]">
         <div className="xl:me-10">
+          <ul className="grid w-full gap-6 md:grid-cols-3 mb-3">
+            <li>
+                <input type="checkbox" id="react-option" name="category" value="Semua" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Semua'}/>
+                <label htmlFor="react-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           
+                  Semua
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" id="flowbite-option" name="category" value="Makanan" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Makanan'}/>
+                <label htmlFor="flowbite-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  Makanan
+                </label>
+            </li> 
+            <li>
+                <input type="checkbox" id="angular-option" name="category" value="Minuman" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Minuman'}/>
+                <label htmlFor="angular-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  Minuman
+                </label>
+            </li>
+          </ul>
           <div className="flex flex-col gap-8">
-            {groupByCategory().map((categoryMenu, i) => (
+            {filteredData.map((categoryMenu, i) => (
               <CardMenu key={i} itemCategory={categoryMenu} handleSelectMenu={handleSelectMenu} handleSelectToping={handleSelectToping} dataTopings={topingSelected}/>
             ))}
           </div>
@@ -306,8 +347,6 @@ const OrderPage = () => {
               <div className="flex flex-col gap-2 py-8">
                 {cart.map((item, i) => {
                   const menu = dataMenu.find((menu) => menu.id === item.menuId);
-                  console.log(menu)
-                  console.log(item.id)
                   if(menu) return (
                     <div key={i} className="w-full flex flex-col gap-2 bg-slate-200 py-1 px-3 rounded" >
                       <div className="flex gap-6 justify-center items-center">
@@ -342,25 +381,25 @@ const OrderPage = () => {
                           </div>
                         </div>
                       </div>
-                      {item.topings.length > 0 && (
-                            <div className="flex flex-col">
-                              <p>Toping</p>
-                              {item.topings.map((toping, i) => (
-                                <div key={i} className="flex justify-between items-center">
-                                  <div className="flex gap-2">
-                                    <p>{toping}</p>
-                                    <p>x{item.jumlah}</p>
-                                  </div>
-                                  <p>
-                                    {Number(menu.topings.find((top) => top.namaToping === toping).hargaToping).toLocaleString("id-ID", {
-                                      style: "currency",
-                                      currency: "IDR",
-                                    })}
-                                  </p>
-                                </div>
-                              ))}
+                      {item?.topings.length > 0 && (
+                        <div className="flex flex-col">
+                          <p>Toping</p>
+                          {item.topings.map((toping, i) => (
+                            <div key={i} className="flex justify-between items-center">
+                              <div className="flex gap-2">
+                                <p>{toping}</p>
+                                <p>x{item.jumlah}</p>
+                              </div>
+                              <p>
+                                {Number(menu.topings.find((top) => top.namaToping === toping).hargaToping).toLocaleString("id-ID", {
+                                  style: "currency",
+                                  currency: "IDR",
+                                })}
+                              </p>
                             </div>
-                          )}
+                          ))}
+                        </div>
+                      )}
                     </div>
                   );
                 })}

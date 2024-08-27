@@ -127,19 +127,29 @@ const PaymentPage = () => {
                     <div className="h-max grid grid-cols-1 lg:grid-cols-2 max-lg:px-6 gap-6">
                         {cart.map((item, i) => {
                             const menu = dataMenu.find((menu) => menu.id === item.menuId)
+                            console.log(menu)
                             return (
-                                <div key={i} className="flex gap-3 bg-slate-100 border border-slate-200 shadow-sm p-2">
-                                    <img className='w-20 h-20 object-cover rounded aspect-square' src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
-                                    <div className="w-full flex flex-col justify-between">
-                                        <div className="">
-                                            <h5 className='text-lg font-bold text-black'>{menu.namaMenu}</h5>
-                                            <p className='text-slate-500 text-xs'>{menu.kategoriMenu}</p>
-                                        </div>
-                                        <div className="w-full flex justify-between text-black">
-                                            <p>Jumlah: {item.jumlah}</p>
-                                            <p className='font-bold'>{Number(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+                                <div key={i} className="flex flex-col">
+                                    <div className="flex gap-3 bg-slate-100 border border-slate-200 shadow-sm p-2">
+                                        <img className='w-20 h-20 object-cover rounded aspect-square' src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`} alt={menu.namaMenu} />
+                                        <div className="w-full flex flex-col justify-between">
+                                            <div className="">
+                                                <h5 className='text-lg font-bold text-black'>{menu.namaMenu}</h5>
+                                                <p className='text-slate-500 text-xs'>{menu.kategoriMenu}</p>
+                                            </div>
+                                            <div className="w-full flex justify-between text-black">
+                                                <p>Jumlah: {item.jumlah}</p>
+                                                <p className='font-bold'>{Number(item.harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+                                            </div>
                                         </div>
                                     </div>
+                                    {item?.topings.map((toping, i) => (
+                                        <div key={i} className="flex justify-between items-center bg-slate-200 p-2 text-black">
+                                            <span>{toping}</span>
+                                            <span>x{item.jumlah}</span>
+                                            <span>{(menu.topings.find((top) => top.namaToping === toping).hargaToping * item.jumlah).toLocaleString("id-ID", { style: "currency", currency: "IDR" })}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             )
                         })}

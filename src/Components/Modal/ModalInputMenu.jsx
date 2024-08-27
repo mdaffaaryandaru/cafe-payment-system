@@ -62,6 +62,7 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
 
   const handleSubmit = (e) => {
     handleOnSubmit(e);
+    setFilename({});
     setOpen(false);
   };
 
