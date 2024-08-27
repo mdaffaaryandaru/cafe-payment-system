@@ -34,8 +34,8 @@ export class OrderService {
       const detailOrderan = this.detailOrderanRepository.create(detail);
       detailOrderan.order = order; // Set the order reference
 
-      if (detail.topping && Array.isArray(detail.topping)) {
-        detailOrderan.topping = detail.topping;
+      if (detail.topings && Array.isArray(detail.topings)) {
+        detailOrderan.topings = detail.topings;
       }
 
       return detailOrderan;

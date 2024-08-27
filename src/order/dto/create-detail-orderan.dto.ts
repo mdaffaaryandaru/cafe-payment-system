@@ -14,5 +14,5 @@ export class CreateDetailOrderanDto {
   harga: number;
 
   @IsArray()
-  topping: string[];
+  topings: string[];
 }
