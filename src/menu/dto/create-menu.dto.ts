@@ -43,6 +43,7 @@ export class CreateMenuDto {
   gambarMenu?: string;
 
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreateTopingDto)
   topings: CreateTopingDto[];
