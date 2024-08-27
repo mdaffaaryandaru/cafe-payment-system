@@ -123,7 +123,11 @@ const OrderPage = () => {
       setCart((prevCart) => {
         const itemIndex = prevCart.findIndex((item) => item.menuId === id);
         if (itemIndex > -1) {
-          if(topingSelected.menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === false) {
+          console.log(_.isEqual(topingSelected.topings, cart[itemIndex].topings))
+          console.log(cart[itemIndex].menuId === id)
+          console.log(cart[itemIndex].menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === false)
+          console.log(topingSelected?.menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === true)
+          if(cart[itemIndex].menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === false) {
             console.log("masuk 1")
             return [
               ...prevCart,
@@ -132,7 +136,7 @@ const OrderPage = () => {
                 menuId: selectedMenu.id,
                 jumlah: 1,
                 harga: Number(selectedMenu.hargaMenu),
-                topings: topingSelected.topings,
+                topings: topingSelected?.topings ?? [],
               },
             ];
           } else if(topingSelected.menuId === id && _.isEqual(topingSelected.topings, cart[itemIndex].topings) === true) {
