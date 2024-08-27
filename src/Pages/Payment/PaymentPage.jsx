@@ -18,8 +18,6 @@ const PaymentPage = () => {
 
   // const status ='Pesanan diterima ke kasir'
 
-  console.log(cart);
-
   const dataRekening = [
     {
       nama_bank: "BCA Transfer",
@@ -106,6 +104,8 @@ const PaymentPage = () => {
     });
 
     console.log(dataOrder);
+    console.log(cart);
+    console.log(cart.map(({ id, ...rest }) => rest));
 
     const newFormData = new FormData();
     newFormData.append("noMeja", dataOrder.noMeja);
@@ -120,7 +120,7 @@ const PaymentPage = () => {
       const response = await postWithFile("/order/create-order", newFormData);
       console.log(response);
       localStorage.removeItem("order");
-    //   navigate(`/order-tracker/${response.id}/${response.namaPelanggan}`);
+      navigate(`/order-tracker/${response.id}/${response.namaPelanggan}`);
       setIsLoading(false);
       Swal.fire({
         icon: "success",

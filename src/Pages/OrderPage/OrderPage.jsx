@@ -46,9 +46,9 @@ const OrderPage = () => {
   };
 
   const fetchMenu = async () => {
-    setIsLoading(true);
     try {
       const res = await get("/menu")
+      console.log(res)
       setDataMenu(res);
     } catch (e) {
       console.log(e);
@@ -78,7 +78,7 @@ const OrderPage = () => {
   }, [dataMenu]);
 
   // Group Berdasarkan Kategori
-  const groupByCategory = () => {
+  const groupByCategory = (dataMenu) => {
     const grouped = dataMenu.reduce((acc, menu) => {
       const category = menu.kategoriMenu.trim(); // Menghapus spasi di awal/akhir kategori
       if (!acc[category]) {
@@ -96,10 +96,11 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    const grouped = groupByCategory();
+    const grouped = groupByCategory(dataMenu);
+    console.log(grouped)
     setGroupedData(grouped);
     setFilteredData(grouped);
-  }, []);
+  }, [dataMenu]);
 
   useEffect(() => {
       if (selectedCategory === 'Semua') {

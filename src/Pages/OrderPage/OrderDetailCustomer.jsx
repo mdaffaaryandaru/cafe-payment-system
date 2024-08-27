@@ -91,7 +91,7 @@ const OrderDetailCustomer = () => {
         fetchOrderById()
         fetchMenu()
     }, [])
-    
+
     useEffect(() => {
         setIsLoading(dataOrderan.length === 0);
     }, [dataOrderan])
@@ -139,6 +139,13 @@ const OrderDetailCustomer = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    {item?.topings.map((toping, i) => (
+                                        <div key={i} className="flex justify-between items-center bg-slate-200 p-2 text-black">
+                                            <span>{toping}</span>
+                                            <span>x{item.jumlah}</span>
+                                            <span>{(menu.topings.find((top) => top.namaToping === toping).hargaToping * item.jumlah).toLocaleString("id-ID", { style: "currency", currency: "IDR" })}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             );
                         })
