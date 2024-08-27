@@ -9,7 +9,7 @@ import _ from "lodash";
 const OrderPage = () => {
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { noMeja } = useParams();
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -46,6 +46,7 @@ const OrderPage = () => {
   };
 
   const fetchMenu = async () => {
+    setIsLoading(true);
     try {
       const res = await get("/menu")
       setDataMenu(res);
@@ -95,7 +96,7 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    const grouped = groupByCategory(dataMenu);
+    const grouped = groupByCategory();
     setGroupedData(grouped);
     setFilteredData(grouped);
   }, []);
@@ -317,7 +318,7 @@ const OrderPage = () => {
                 </label>
             </li>
           </ul>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8">\
             {filteredData.map((categoryMenu, i) => (
               <CardMenu key={i} itemCategory={categoryMenu} handleSelectMenu={handleSelectMenu} handleSelectToping={handleSelectToping} dataTopings={topingSelected}/>
             ))}

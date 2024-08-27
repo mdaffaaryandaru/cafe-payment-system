@@ -91,7 +91,7 @@ const OrderDetailCustomer = () => {
         fetchOrderById()
         fetchMenu()
     }, [])
-
+    
     useEffect(() => {
         setIsLoading(dataOrderan.length === 0);
     }, [dataOrderan])
@@ -119,8 +119,8 @@ const OrderDetailCustomer = () => {
                             if (!menu) return null; // Menangani kasus jika menu tidak ditemukan
                             console.log(item)
                             return (
-                                <div className="flex flex-col">
-                                    <div key={i} className="flex gap-3 bg-slate-800 p-2">
+                                <div key={i} className="flex flex-col">
+                                    <div className="flex gap-3 bg-slate-800 p-2">
                                         <img
                                             className='w-16 h-16 object-cover rounded aspect-square'
                                             src={`${process.env.REACT_APP_BASE_URL_API}/menu/images/${menu.gambarMenu}`}
@@ -139,11 +139,6 @@ const OrderDetailCustomer = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {item?.topings.map((toping, i) => (
-                                        <div key={i} className="flex justify-between items-center bg-slate-700 p-2">
-                                            <span>{toping}</span>
-                                        </div>
-                                    ))}
                                 </div>
                             );
                         })
