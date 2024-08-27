@@ -29,9 +29,9 @@ export class AppGateway {
   }
 
   @SubscribeMessage('orderNotificationCustomer')
-  handleMessageCustomer(@MessageBody() order: any) {
-    pusher.trigger('my-channel', 'my-event', {
-      message: order,
+  handleMessageCustomer(@MessageBody() updatedOrder: any) {
+    pusher.trigger('my-channel-customer', 'my-event-customer', {
+      message: updatedOrder,
     });
   }
 }
