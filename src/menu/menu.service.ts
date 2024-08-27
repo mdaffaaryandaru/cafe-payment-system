@@ -20,10 +20,10 @@ export class MenuService {
   ) {}
 
   async createMenu(createMenuDto: CreateMenuDto): Promise<Menu> {
-    const { topings, ...menuData } = createMenuDto;
+    const { topings = [], ...menuData } = createMenuDto; // Initialize topings as an empty array if not provided
     const menu = this.menuRepository.create(menuData);
 
-    if (topings && topings.length > 0) {
+    if (Array.isArray(topings) && topings.length > 0) {
       const topingEntities = await Promise.all(
         topings.map(async (toping) => {
           const topingEntity = this.topingRepository.create({
@@ -35,17 +35,18 @@ export class MenuService {
       );
       menu.topings = topingEntities;
     } else {
-      menu.topings = [];
+      menu.topings = []; // Initialize as an empty array if no topings are provided
     }
 
     return this.menuRepository.save(menu);
   }
+
   findAllMenu(): Promise<Menu[]> {
     return this.menuRepository.find({ relations: ['topings'] });
   }
 
   async updateMenu(id: number, updateMenuDto: UpdateMenuDto): Promise<Menu> {
-    const { topings, ...menuData } = updateMenuDto;
+    const { topings = [], ...menuData } = updateMenuDto; // Initialize topings as an empty array if not provided
     const menu = await this.menuRepository.findOne({
       where: { id },
       relations: ['topings'],
@@ -56,7 +57,7 @@ export class MenuService {
 
     Object.assign(menu, menuData);
 
-    if (topings && topings.length > 0) {
+    if (Array.isArray(topings) && topings.length > 0) {
       const existingTopings = menu.topings;
 
       const updatedTopings = await Promise.all(
@@ -86,7 +87,7 @@ export class MenuService {
 
       menu.topings = updatedTopings;
     } else {
-      menu.topings = [];
+      menu.topings = []; // Initialize as an empty array if no topings are provided
     }
 
     const savedMenu = await this.menuRepository.save(menu);
