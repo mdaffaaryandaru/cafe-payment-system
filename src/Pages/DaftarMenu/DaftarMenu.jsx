@@ -97,6 +97,7 @@ const DaftarMenu = () => {
     try {
       const response = await postWithFile("/menu/create-menu", newFormData);
       console.log(response);
+      console.log(newFormData);
     } catch (error) {
       console.log(error);
     }
