@@ -137,13 +137,13 @@ const PaymentPage = () => {
   };
 
   return (
-    <section className="relative min-h-screen bg-white">
+    <section className="relative min-h-screen bg-white px-2">
       <div className="absolute top-0 left-0"></div>
       <div className="container">
         <h1 className="text-2xl lg:text-4xl font-bold py-5 text-black">
           Selesaikan Pembayaran
         </h1>
-        <div className="w-full flex justify-between items-center mb-8 rounded bg-slate-100 text-black p-2">
+        <div className="w-full flex justify-between items-center mb-8 rounded bg-[#419197] text-white p-2">
           <div className="">
             <p>Nama</p>
             <h3 className="text-2xl font-bold">{dataOrder.namaPelanggan}</h3>

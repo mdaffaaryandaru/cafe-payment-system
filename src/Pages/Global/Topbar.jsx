@@ -81,7 +81,7 @@ const Topbar = () => {
   }, [message]);
 
   return (
-    <Box display="flex" justifyContent="end" p={2}>
+    <Box display="flex" justifyContent="end" p={2} bgcolor={'#419197'}>
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (

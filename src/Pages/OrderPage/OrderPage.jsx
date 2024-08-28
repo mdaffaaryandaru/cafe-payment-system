@@ -6,6 +6,8 @@ import { get } from "../../utils/api";
 import CardMenu from "../../Components/Menu/CardMenu";
 import _ from "lodash";
 
+import seruni from "../../Assets/seruni.png";
+
 const OrderPage = () => {
   const navigate = useNavigate();
 
@@ -281,9 +283,12 @@ const OrderPage = () => {
 
   return (
     <main className="h-screen bg-white z-50 overflow-y-scroll">
-      <div className="bg-slate-100 py-4">
-        <div className="container flex justify-between items-center">
-          <h3 className="text-2xl font-bold text-black">Seruni Kopi</h3>
+      <div className="bg-[#419197] py-4">
+        <div className="container flex justify-between items-center px-2">
+          <div className="flex gap-2">
+            <img src={seruni} alt="senui kopi" className="w-8 h-8 object-contain"/>
+            <h3 className="text-2xl font-bold text-white">Seruni Kopi</h3>
+          </div>
           <div className="xl:hidden flex justify-center items-center gap-2">
             <h2 className="bg-red-500 font-bold w-5 h-5 text-center rounded-full">
               {cart.length}
@@ -299,7 +304,7 @@ const OrderPage = () => {
       </div>
       <div className="w-full h-[90vh] p-6 xl:p-10 max-md:overflow-y-scroll max-md:overflow-x-hidden max-md:relative xl:grid xl:grid-cols-[1.5fr_1fr]">
         <div className="xl:me-10">
-          <ul className="flex gap-4 mb-3">
+          <ul className="w-full flex gap-4 justify-center items-center">
             <li className="w-max">
                 <input type="checkbox" id="react-option" name="category" value="Semua" className="hidden peer" onChange={handleSelectedCategory} checked={selectedCategory === 'Semua'}/>
                 <label htmlFor="react-option" className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">                           

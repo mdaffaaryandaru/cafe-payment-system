@@ -77,7 +77,6 @@ const OrderanPelanggan = () => {
     {
       field: "noMeja",
       headerName: "Nomor Meja",
-      flex: 1,
       cellClassName: "name-collumn--cell",
     },
     {
@@ -96,21 +95,21 @@ const OrderanPelanggan = () => {
     {
       field: "jenisPembayaran",
       headerName: "Jenis Pembayaran",
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: "totalHarga",
       headerName: "Total Harga Pembayaran",
-      flex: 1,
+      flex: 0.5,
     },
     {
       field: "actions",
       headerName: "Actions",
       flex: 0.5,
       renderCell: (params) => (
-        <div>
-          <Link className="bg-lime-400 p-2 text-black rounded" to={`/detail-orderan-pelanggan/${params.row.id}`}>
-            Lihat Pesanan
+        <div className="w-full">
+          <Link className="bg-lime-400 p-2 text-black rounded w-fit" to={`/detail-orderan-pelanggan/${params.row.id}`}>
+            {params.row.statusPesanan}
           </Link>
         </div>
       ),
