@@ -124,7 +124,7 @@ const PaymentPage = () => {
       setIsLoading(false);
       Swal.fire({
         icon: "success",
-        title: "Pembayaran telah diterima",
+        title: "Pesanan Anda Sedang Di Buat Oleh Barista",
         text: "Tim kami akan segera memproses pesanan Anda! harap tunggu notifikasi pesanan selesai",
       });
     } catch (error) {

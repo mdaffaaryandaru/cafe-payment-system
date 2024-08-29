@@ -63,7 +63,7 @@ const ModalEditMenu = ({ setDataForm, dataItem, handleOnSubmit }) => {
   };
 
   const handleSubmit = (e) => {
-    handleOnSubmit(e, data.id);
+    handleOnSubmit(e, data.id, toppingFields);
     setOpen(false);
   };
 
@@ -80,7 +80,6 @@ const ModalEditMenu = ({ setDataForm, dataItem, handleOnSubmit }) => {
         ? { ...field, [name]: type === "number" ? Number(value) : value }
         : field
     );
-
     setData({
       ...data,
       topings: updatedFields,
@@ -174,7 +173,8 @@ const ModalEditMenu = ({ setDataForm, dataItem, handleOnSubmit }) => {
                       onChange={handleOnChange}
                     >
                       <MenuItem value="Makanan">Makanan</MenuItem>
-                      <MenuItem value="Minuman">Minuman</MenuItem>
+                      <MenuItem value="Coffee">Coffee</MenuItem>
+                      <MenuItem value="Non Coffee">Non Coffee</MenuItem>
                     </Select>
                   </FormControl>
                   <TextField

@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const styleModal = {
   position: "absolute",
@@ -46,7 +46,9 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
   const [open, setOpen] = React.useState(false);
   const [filename, setFilename] = useState({});
 
-  const [toppingFields, setToppingFields] = useState([{ namaToping: '', hargaToping: '' }]);
+  const [toppingFields, setToppingFields] = useState([
+    { namaToping: "", hargaToping: "" },
+  ]);
 
   const handleOnChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -70,13 +72,15 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
   // Fungsi untuk menangani perubahan input
   const handleToppingChange = (index, event) => {
     const { name, value, type } = event.target;
-    const updatedFields = toppingFields.map((field, i) => 
-      i === index ? { ...field, [name]: type === "number" ? Number(value) : value } : field
+    const updatedFields = toppingFields.map((field, i) =>
+      i === index
+        ? { ...field, [name]: type === "number" ? Number(value) : value }
+        : field
     );
 
     setDataForm({
       ...dataForm,
-      topings: updatedFields
+      topings: updatedFields,
     });
     setToppingFields(updatedFields);
   };
@@ -84,7 +88,7 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
   // Fungsi untuk menambah field topping
   const handleAddToppingField = () => {
     if (toppingFields.length < 7) {
-      setToppingFields([...toppingFields, { namaToping: '', hargaToping: '' }]);
+      setToppingFields([...toppingFields, { namaToping: "", hargaToping: "" }]);
     }
   };
 
@@ -170,7 +174,8 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
                     onChange={handleOnChange} // Menggunakan handleChange yang sama
                   >
                     <MenuItem value="Makanan">Makanan</MenuItem>
-                    <MenuItem value="Minuman">Minuman</MenuItem>
+                    <MenuItem value="Coffee">Coffee</MenuItem>
+                    <MenuItem value="Non Coffee">Non Coffee</MenuItem>
                   </Select>
                 </FormControl>
                 <TextField
@@ -186,19 +191,49 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
               <div className="h-full overflow-y-auto">
                 <div className="flex justify-between items-center">
                   <h1>Tambah Topping</h1>
-                  <button type="button" className="bg-slate-700 py-1 px-2" onClick={handleAddToppingField} startIcon={<AddIcon />}>Add Topping</button>
+                  <button
+                    type="button"
+                    className="bg-slate-700 py-1 px-2"
+                    onClick={handleAddToppingField}
+                    startIcon={<AddIcon />}
+                  >
+                    Add Topping
+                  </button>
                 </div>
                 <Box component="form" onSubmit={handleSubmit}>
                   {toppingFields.map((field, index) => (
-                    <div key={index} className="w-full h-full grid grid-cols-[1fr_1fr_26px] gap-4 justify-center items-center">
-                      <TextField required label="Nama Topping" name="namaToping" color="secondary" value={field.namaToping} onChange={(e) => handleToppingChange(index, e)} sx={{ marginRight: '1rem', width: 'calc(50% - 1rem)' }}/>
-                      <TextField required label="Harga Topping" type="number" name="hargaToping" color="secondary" value={field.hargaToping} onChange={(e) => handleToppingChange(index, e)} sx={{ width: 'calc(50% - 1rem)' }}
+                    <div
+                      key={index}
+                      className="w-full h-full grid grid-cols-[1fr_1fr_26px] gap-4 justify-center items-center"
+                    >
+                      <TextField
+                        required
+                        label="Nama Topping"
+                        name="namaToping"
+                        color="secondary"
+                        value={field.namaToping}
+                        onChange={(e) => handleToppingChange(index, e)}
+                        sx={{ marginRight: "1rem", width: "calc(50% - 1rem)" }}
+                      />
+                      <TextField
+                        required
+                        label="Harga Topping"
+                        type="number"
+                        name="hargaToping"
+                        color="secondary"
+                        value={field.hargaToping}
+                        onChange={(e) => handleToppingChange(index, e)}
+                        sx={{ width: "calc(50% - 1rem)" }}
                       />
                       {toppingFields.length > 1 && (
                         // <IconButton onClick={() => handleRemoveToppingField(index)} color="error">
                         //   <RemoveIcon />
                         // </IconButton>
-                        <button type="button" onClick={() => handleRemoveToppingField(index)} className="w-6 h-6 rounded-full bg-red-300">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveToppingField(index)}
+                          className="w-6 h-6 rounded-full bg-red-300"
+                        >
                           <RemoveIcon />
                         </button>
                       )}
@@ -207,15 +242,15 @@ const ModalInputMenu = ({ dataForm, setDataForm, handleOnSubmit }) => {
                 </Box>
               </div>
             </div>
-              <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                sx={{ mt: 2 }}
-                fullWidth
-              >
-                simpan
-              </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              sx={{ mt: 2 }}
+              fullWidth
+            >
+              simpan
+            </Button>
           </Box>
         </Box>
       </Modal>

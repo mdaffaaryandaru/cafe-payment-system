@@ -115,7 +115,7 @@ const DaftarMenu = () => {
   };
 
   // PUT data menu
-  const handleEdit = async (e, id) => {
+  const handleEdit = async (e, id, dataTopping) => {
     e.preventDefault();
 
     const newFormData = new FormData();
@@ -127,13 +127,14 @@ const DaftarMenu = () => {
     newFormData.append("hargaMenu", formDataEdit.hargaMenu);
 
     // Append toppings to the FormData
-    formDataEdit.topings.forEach((toping, index) => {
+    dataTopping.forEach((toping, index) => {
       newFormData.append(`topings[${index}][namaToping]`, toping.namaToping);
       newFormData.append(`topings[${index}][hargaToping]`, toping.hargaToping);
     });
 
     try {
-      await putWithImage(`/menu/edit-menu/${id}`, newFormData);
+      const response = await putWithImage(`/menu/edit-menu/${id}`, newFormData);
+      console.log(response);
     } catch (error) {
       console.error("Error editing item:", error);
     }

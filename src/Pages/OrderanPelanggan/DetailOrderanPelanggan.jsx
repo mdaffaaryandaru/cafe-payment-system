@@ -66,8 +66,8 @@ const DetailOrderanPelanggan = () => {
       setIsLoading(false);
       Swal.fire({
         icon: "success",
-        title: "Pembayaran telah diterima",
-        text: "Tim kami akan segera memproses pesanan Anda! harap tunggu notifikasi pesanan selesai",
+        title: "Pesanan Anda Sedang Diproses",
+        text: "Tunggu Team Kami Mengkonfirmasi Pesanan ANda",
       });
     } catch (error) {
       console.error(error);
