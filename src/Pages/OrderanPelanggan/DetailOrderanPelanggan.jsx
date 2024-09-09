@@ -66,8 +66,8 @@ const DetailOrderanPelanggan = () => {
       setIsLoading(false);
       Swal.fire({
         icon: "success",
-        title: "Pesanan Anda Sedang Diproses",
-        text: "Tunggu Team Kami Mengkonfirmasi Pesanan ANda",
+        title: "Order Berhasil Diubah",
+        text: "Status order berhasil diubah",
       });
     } catch (error) {
       console.error(error);
@@ -204,6 +204,12 @@ const DetailOrderanPelanggan = () => {
                   hidden={dataOrder.jenisPembayaran === "Pesanan selesai"}
                 >
                   Pesanan selesai
+                </option>
+                <option
+                  value="Pesanan ditolak"
+                  hidden={dataOrder.jenisPembayaran === "Pesanan ditolak"}
+                >
+                  Pesanan ditolak
                 </option>
               </select>
             </label>

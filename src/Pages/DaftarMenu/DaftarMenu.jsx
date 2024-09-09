@@ -26,6 +26,7 @@ import {
 } from "../../utils/api";
 import ModalInputMenu from "../../Components/Modal/ModalInputMenu";
 import ModalEditMenu from "../../Components/Modal/ModalEditMenu";
+import Swal from "sweetalert2";
 
 const DaftarMenu = () => {
   const theme = useTheme();
@@ -84,10 +85,10 @@ const DaftarMenu = () => {
     newFormData.append("kategoriMenu", formData.kategoriMenu);
     newFormData.append("hargaMenu", formData.hargaMenu);
 
-    if (formData.topings > 0) {
+    if (formData.topings && formData.topings.length > 0) {
       console.log("masuk sini");
-      formData.topings.map((topping, index) => {
-        Object.entries(topping).map(([key, value]) => {
+      formData.topings.forEach((topping, index) => {
+        Object.entries(topping).forEach(([key, value]) => {
           console.log(`topings[${index}][${key}]`, value);
           newFormData.append(`topings[${index}][${key}]`, value);
         });
@@ -98,10 +99,18 @@ const DaftarMenu = () => {
       const response = await postWithFile("/menu/create-menu", newFormData);
       console.log(response);
       console.log(newFormData);
+      fetchItems();
+      Swal.fire({
+        title: "Success!",
+        text: "Menu has been added!",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        window.location.reload(); // Reload the page
+      });
     } catch (error) {
       console.log(error);
     }
-    fetchItems();
   };
 
   // DELETE data menu

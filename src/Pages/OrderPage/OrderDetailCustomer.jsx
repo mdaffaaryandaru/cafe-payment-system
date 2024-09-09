@@ -96,6 +96,39 @@ const OrderDetailCustomer = () => {
   }, []);
 
   useEffect(() => {
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher("eeac291f5408aa1cf514", {
+      cluster: "ap1",
+    });
+
+    // Subscribe to the channel
+    const channel = pusher.subscribe("my-channel-customer-reject");
+
+    // Bind to the event
+    channel.bind("my-event-customer-reject", (data) => {
+      loadAudio();
+      //refresh page the page
+      if (data.message.id == id) {
+        setCurrStatus(data.message);
+        playAudio();
+        Swal.fire({
+          title: "Pesanan Ditolak",
+          text: "Pesanan Anda telah Ditolak, silahkan melakukan pembaran / konfirmasi ke kasir",
+          icon: "error",
+        }).then(() => {
+          window.location.reload(); // Reload the page after the alert is closed
+        });
+      }
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      pusher.unsubscribe("my-channel-customer-reject");
+    };
+  });
+
+  useEffect(() => {
     fetchOrderById();
     fetchMenu();
   }, []);
@@ -118,14 +151,18 @@ const OrderDetailCustomer = () => {
         </p>
         <div
           className={`border ${
-            currStatus == "Pesanan selesai" ||
-            dataOrder.statusPesanan == "Pesanan selesai"
+            currStatus === "Pesanan selesai" ||
+            dataOrder.statusPesanan === "Pesanan selesai"
               ? "border-green-400 bg-green-300/20"
+              : currStatus === "Pesanan ditolak" ||
+                dataOrder.statusPesanan === "Pesanan ditolak"
+              ? "border-red-400 bg-red-300/20"
               : "border-yellow-400 bg-yellow-300/20"
           } p-3 rounded my-4`}
         >
           <span>
-            {currStatus == "Pesanan selesai"
+            {currStatus === "Pesanan selesai" ||
+            currStatus === "Pesanan ditolak"
               ? currStatus
               : dataOrder.statusPesanan}
           </span>

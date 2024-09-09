@@ -365,7 +365,7 @@ const OrderPage = () => {
             <li className="w-max">
               <input
                 type="checkbox"
-                id="flowbite-option"
+                id="angular-option"
                 name="category"
                 value="Coffee"
                 className="hidden peer"
@@ -373,7 +373,7 @@ const OrderPage = () => {
                 checked={selectedCategory === "Coffee"}
               />
               <label
-                htmlFor="flowbite-option"
+                htmlFor="angular-option"
                 className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
                 Coffee
@@ -382,7 +382,7 @@ const OrderPage = () => {
             <li className="w-max">
               <input
                 type="checkbox"
-                id="flowbite-option"
+                id="angular-option-1"
                 name="category"
                 value="Non Coffee"
                 className="hidden peer"
@@ -390,7 +390,7 @@ const OrderPage = () => {
                 checked={selectedCategory === "Non Coffee"}
               />
               <label
-                htmlFor="flowbite-option"
+                htmlFor="angular-option-1"
                 className="inline-flex items-center justify-between w-full p-2 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
                 Non Coffee
@@ -500,27 +500,30 @@ const OrderPage = () => {
                         {item?.topings.length > 0 && (
                           <div className="flex flex-col">
                             <p>Toping</p>
-                            {item.topings.map((toping, i) => (
-                              <div
-                                key={i}
-                                className="flex justify-between items-center"
-                              >
-                                <div className="flex gap-2">
-                                  <p>{toping}</p>
-                                  <p>x{item.jumlah}</p>
+                            {item.topings.map((toping, i) => {
+                              const hargaToping = Number(
+                                menu.topings.find(
+                                  (top) => top.namaToping === toping
+                                ).hargaToping
+                              );
+                              return (
+                                <div
+                                  key={i}
+                                  className="flex justify-between items-center"
+                                >
+                                  <div className="flex gap-2">
+                                    <p>{toping}</p>
+                                    <p>x{item.jumlah}</p>
+                                  </div>
+                                  <p>
+                                    {hargaToping.toLocaleString("id-ID", {
+                                      style: "currency",
+                                      currency: "IDR",
+                                    })}
+                                  </p>
                                 </div>
-                                <p>
-                                  {Number(
-                                    menu.topings.find(
-                                      (top) => top.namaToping === toping
-                                    ).hargaToping
-                                  ).toLocaleString("id-ID", {
-                                    style: "currency",
-                                    currency: "IDR",
-                                  })}
-                                </p>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         )}
                       </div>
