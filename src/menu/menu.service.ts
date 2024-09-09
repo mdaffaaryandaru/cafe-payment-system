@@ -113,7 +113,6 @@ export class MenuService {
     return updatedMenu;
   }
 
-  //!Belum Delete Bersama Toping
   async deleteMenu(id: number): Promise<void> {
     const menu = await this.menuRepository.findOne({
       where: { id },

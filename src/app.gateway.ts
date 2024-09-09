@@ -34,4 +34,11 @@ export class AppGateway {
       message: updatedOrder,
     });
   }
+
+  @SubscribeMessage('orderRejectNotificationCustomer')
+  handleMessageRejectCustomer(@MessageBody() updatedOrder: any) {
+    pusher.trigger('my-channel-customer-reject', 'my-event-customer-reject', {
+      message: updatedOrder,
+    });
+  }
 }

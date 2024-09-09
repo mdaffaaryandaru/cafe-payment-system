@@ -148,6 +148,8 @@ export class OrderController {
     const updatedOrder = await this.orderService.update(order);
     if (updateOrderDto.statusPesanan === 'Pesanan selesai') {
       this.appGateway.handleMessageCustomer(updatedOrder);
+    } else if (updateOrderDto.statusPesanan === 'Pesanan ditolak') {
+      this.appGateway.handleMessageRejectCustomer(updatedOrder);
     }
 
     return updatedOrder;

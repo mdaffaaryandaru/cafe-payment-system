@@ -18,38 +18,38 @@ import { Toping } from './toping/entities/toping.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService): TypeOrmModule => ({
-        type: configService.get<string>('DB_TYPE'),
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        entities: [Menu, Pegawai, Order, DetailOrderan, Toping],
-        synchronize: true,
-        ssl: configService.get<boolean>('DB_SSL')
-          ? { rejectUnauthorized: false }
-          : false,
-      }),
-      inject: [ConfigService],
-    }),
     // TypeOrmModule.forRootAsync({
     //   imports: [ConfigModule],
     //   useFactory: (configService: ConfigService): TypeOrmModule => ({
-    //     type: 'mysql', // Set the database type to MySQL
-    //     host: '127.0.0.1', // Set the host to localhost for local MySQL
-    //     port: 3306, // Default MySQL port
-    //     username: 'root', // Your MySQL username
-    //     password: '', // Your MySQL password
-    //     database: 'seruni_database', // Your MySQL database name
+    //     type: configService.get<string>('DB_TYPE'),
+    //     host: configService.get<string>('DB_HOST'),
+    //     port: configService.get<number>('DB_PORT'),
+    //     username: configService.get<string>('DB_USERNAME'),
+    //     password: configService.get<string>('DB_PASSWORD'),
+    //     database: configService.get<string>('DB_DATABASE'),
     //     entities: [Menu, Pegawai, Order, DetailOrderan, Toping],
     //     synchronize: true,
-    //     ssl: false, // Disable SSL for local MySQL
+    //     ssl: configService.get<boolean>('DB_SSL')
+    //       ? { rejectUnauthorized: false }
+    //       : false,
     //   }),
     //   inject: [ConfigService],
     // }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService): TypeOrmModule => ({
+        type: 'mysql', // Set the database type to MySQL
+        host: '127.0.0.1', // Set the host to localhost for local MySQL
+        port: 3306, // Default MySQL port
+        username: 'root', // Your MySQL username
+        password: '', // Your MySQL password
+        database: 'seruni_database', // Your MySQL database name
+        entities: [Menu, Pegawai, Order, DetailOrderan, Toping],
+        synchronize: true,
+        ssl: false, // Disable SSL for local MySQL
+      }),
+      inject: [ConfigService],
+    }),
     MenuModule,
     PegawaiModule,
     OrderModule,
