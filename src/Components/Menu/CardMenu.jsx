@@ -37,30 +37,27 @@ const CardMenu = ({ itemCategory, handleSelectMenu, handleSelectToping, dataTopi
                         {/* Toping */}
                         <div className="w-full flex flex-col gap-2">
                             {menu.topings.map((toping, i) => {
-                                console.log()
-                                if(!(toping.length === 1 ,toping.hargaToping === 0)) {
-                                    return (
-                                        <div key={i} className="flex justify-between items-center">
-                                            <label className="flex items-center gap-2">
-                                                {/* Checkbox input */}
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedToppings.menuId === menu.id && selectedToppings.topings.includes(toping.namaToping)}
-                                                    onChange={() => handleSelectToping(menu.id, toping.namaToping)}
-                                                />
-                                                {/* Topping name */}
-                                                <span>{toping.namaToping}</span>
-                                            </label>
-                                            {/* Topping price */}
-                                            <span>
-                                                {Number(toping.hargaToping).toLocaleString("id-ID", {
-                                                style: "currency",
-                                                currency: "IDR",
-                                                })}
-                                            </span>
-                                        </div>
-                                    )
-                                }
+                                return (
+                                    <div key={i} className="flex justify-between items-center">
+                                        <label className="flex items-center gap-2">
+                                            {/* Checkbox input */}
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedToppings.menuId === menu.id && selectedToppings.topings.includes(toping.namaToping)}
+                                                onChange={() => handleSelectToping(menu.id, toping.namaToping)}
+                                            />
+                                            {/* Topping name */}
+                                            <span>{toping.namaToping}</span>
+                                        </label>
+                                        {/* Topping price */}
+                                        <span>
+                                            {Number(toping.hargaToping).toLocaleString("id-ID", {
+                                            style: "currency",
+                                            currency: "IDR",
+                                            })}
+                                        </span>
+                                    </div>
+                                )
                             })}
                         </div>
                     </div>
