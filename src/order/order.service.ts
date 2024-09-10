@@ -13,6 +13,8 @@ export class OrderService {
     private readonly orderRepository: Repository<Order>,
     @InjectRepository(DetailOrderan)
     private readonly detailOrderanRepository: Repository<DetailOrderan>,
+    @InjectRepository(Menu)
+    private readonly menuRepository: Repository<Menu>,
   ) {}
 
   async create(
@@ -40,6 +42,17 @@ export class OrderService {
 
       return detailOrderan;
     });
+
+    // Decrease stock for each menu item in the order
+    for (const detailOrderan of detailOrderanEntities) {
+      const menu = await this.menuRepository.findOne({
+        where: { id: detailOrderan.menuId },
+      });
+      if (menu) {
+        menu.stokMenu -= detailOrderan.jumlah; // Adjust based on your stock decrement logic
+        await this.menuRepository.save(menu);
+      }
+    }
 
     // Save the order and detail orderan entities
     await this.orderRepository.save(order);
