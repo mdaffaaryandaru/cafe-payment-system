@@ -43,17 +43,6 @@ export class OrderService {
       return detailOrderan;
     });
 
-    // Decrease stock for each menu item in the order
-    for (const detailOrderan of detailOrderanEntities) {
-      const menu = await this.menuRepository.findOne({
-        where: { id: detailOrderan.menuId },
-      });
-      if (menu) {
-        menu.stokMenu -= detailOrderan.jumlah; // Adjust based on your stock decrement logic
-        await this.menuRepository.save(menu);
-      }
-    }
-
     // Save the order and detail orderan entities
     await this.orderRepository.save(order);
     await this.detailOrderanRepository.save(detailOrderanEntities);
@@ -70,6 +59,26 @@ export class OrderService {
   }
 
   async update(order: Order): Promise<Order> {
+    if (order.statusPesanan === 'Pesanan selesai') {
+      // Fetch the order with its details
+      const existingOrder = await this.orderRepository.findOne({
+        where: { id: order.id },
+        relations: ['orderan'],
+      });
+
+      if (existingOrder) {
+        // Decrease stock for each menu item in the order
+        for (const detailOrderan of existingOrder.orderan) {
+          const menu = await this.menuRepository.findOne({
+            where: { id: detailOrderan.menuId },
+          });
+          if (menu) {
+            menu.stokMenu -= detailOrderan.jumlah; // Adjust based on your stock decrement logic
+            await this.menuRepository.save(menu);
+          }
+        }
+      }
+    }
     return this.orderRepository.save(order);
   }
 
