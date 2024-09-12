@@ -22,6 +22,9 @@ export class Pegawai {
   @Column()
   statusPegawai: string;
 
+  @Column()
+  password: string;
+
   @CreateDateColumn()
   createdDate: Date;
 }

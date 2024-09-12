@@ -32,4 +32,10 @@ export class UpdatePegawaiDto {
   @IsOptional()
   @ApiProperty()
   statusPegawai: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty()
+  password: string;
 }

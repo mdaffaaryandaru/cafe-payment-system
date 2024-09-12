@@ -28,4 +28,9 @@ export class CreatePegawaiDto {
   @IsNotEmpty()
   @ApiProperty()
   statusPegawai: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  password: string;
 }

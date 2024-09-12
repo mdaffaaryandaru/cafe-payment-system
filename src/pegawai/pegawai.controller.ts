@@ -127,4 +127,22 @@ export class PegawaiController {
   async deletePegawai(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.pegawaiService.deletePegawai(id);
   }
+
+  @Post('login-pegawai')
+  @ApiOperation({ summary: 'Login pegawai' })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful',
+    type: Pegawai,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  async loginPegawai(
+    @Body() createPegawaiDto: CreatePegawaiDto,
+  ): Promise<Pegawai> {
+    try {
+      return await this.pegawaiService.loginPegawai(createPegawaiDto);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }
