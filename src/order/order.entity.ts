@@ -37,4 +37,7 @@ export class Order {
 
   @Column({ nullable: true })
   gambarTransaksi: string;
+
+  @Column({ nullable: true })
+  pegawai: string;
 }

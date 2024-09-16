@@ -24,4 +24,8 @@ export class UpdateOrderDto {
   @IsOptional()
   @IsString()
   gambarTransaksi?: string;
+
+  @IsString()
+  @IsOptional()
+  pegawai: string;
 }

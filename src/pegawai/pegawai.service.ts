@@ -18,14 +18,13 @@ export class PegawaiService {
   ) {}
 
   async createPegawai(createPegawaiDto: CreatePegawaiDto): Promise<Pegawai> {
-    try {
-      const pegawai = this.pegawaiRepository.create(createPegawaiDto);
-      pegawai.password = await bcrypt.hash(createPegawaiDto.password, 10);
-      return await this.pegawaiRepository.save(pegawai);
-    } catch (error) {
-      console.error('Error in createPegawai service method:', error);
-      throw new BadRequestException('Error saving pegawai');
-    }
+    const { password, ...rest } = createPegawaiDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const pegawai = this.pegawaiRepository.create({
+      ...rest,
+      password: hashedPassword,
+    });
+    return this.pegawaiRepository.save(pegawai);
   }
 
   async updatePegawai(
@@ -74,5 +73,35 @@ export class PegawaiService {
     }
 
     return pegawai;
+  }
+  async verifyPassword(createPegawaiDto: CreatePegawaiDto): Promise<boolean> {
+    const { pegawaiId, password } = createPegawaiDto;
+    const pegawai = await this.pegawaiRepository.findOne({
+      where: { id: pegawaiId },
+    });
+
+    if (!pegawai) {
+      throw new NotFoundException('Pegawai not found');
+    }
+
+    console.log(`Verifying password for: ${pegawai.namaPegawai}`);
+    console.log(`Stored password hash: ${pegawai.password}`);
+    console.log(`Provided password: ${password}`);
+
+    // Check if the provided password is not empty
+    if (!password) {
+      console.log('Provided password is empty');
+      return false;
+    }
+
+    // Check if the stored password hash is not empty
+    if (!pegawai.password) {
+      console.log('Stored password hash is empty');
+      return false;
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, pegawai.password);
+    console.log(`Password valid: ${isPasswordValid}`);
+    return isPasswordValid;
   }
 }

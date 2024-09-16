@@ -33,4 +33,6 @@ export class CreateOrderDto {
   @IsString()
   @ApiProperty()
   gambarTransaksi?: string;
+
+ 
 }

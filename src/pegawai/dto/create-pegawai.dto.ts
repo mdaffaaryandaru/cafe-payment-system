@@ -9,6 +9,12 @@ import {
 
 export class CreatePegawaiDto {
   // make example for dto menu
+
+  @IsInt()
+  @IsNotEmpty()
+  @ApiProperty()
+  pegawaiId: number;
+
   @IsString()
   @IsNotEmpty()
   @ApiProperty()

@@ -143,6 +143,8 @@ export class OrderController {
       order.jenisPembayaran = updateOrderDto.jenisPembayaran;
     if (updateOrderDto.totalHarga !== undefined)
       order.totalHarga = updateOrderDto.totalHarga;
+    if (updateOrderDto.pegawai !== undefined)
+      order.pegawai = updateOrderDto.pegawai;
     if (gambarTransaksi) order.gambarTransaksi = gambarTransaksi.filename;
 
     const updatedOrder = await this.orderService.update(order);

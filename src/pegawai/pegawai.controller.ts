@@ -145,4 +145,19 @@ export class PegawaiController {
       throw new BadRequestException(error.message);
     }
   }
+
+  @Post('verify-password')
+  @ApiOperation({ summary: 'Verify Password pegawai' })
+  @ApiResponse({
+    status: 200,
+    description: 'The pegawai has been successfully verified.',
+    type: Pegawai,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  async verifyPassword(
+    @Body() createPegawaiDto: CreatePegawaiDto,
+  ): Promise<{ valid: boolean }> {
+    const isValid = await this.pegawaiService.verifyPassword(createPegawaiDto);
+    return { valid: isValid };
+  }
 }
