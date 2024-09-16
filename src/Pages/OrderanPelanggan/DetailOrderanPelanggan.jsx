@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { get, put } from "../../utils/api";
+import { get, put, post } from "../../utils/api";
 import { useTheme } from "@mui/material";
 import Swal from "sweetalert2";
 
@@ -11,7 +11,10 @@ const DetailOrderanPelanggan = () => {
   const [currTheme, setCurrTheme] = useState();
   const [dataOrder, setDataOrder] = useState({});
   const [dataMenu, setDataMenu] = useState([]);
+  const [selectedPegawai, setSelectedPegawai] = useState("");
+  const [dataPegawai, setDataPegawai] = useState([]);
   const [orderMenu, setOrderMenu] = useState([]);
+  const [password, setPassword] = useState("");
 
   const [openImage, setOpenImage] = useState(false);
   const [selectedValue, setSelectedValue] = useState("");
@@ -41,9 +44,20 @@ const DetailOrderanPelanggan = () => {
       }
     };
 
+    const fetchPegawai = async () => {
+      try {
+        const data = await get("/pegawai");
+        console.log(data);
+        setDataPegawai(data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
     fetchDataOrder();
+    fetchPegawai();
     fetchMenu();
-  }, []);
+  }, [id]);
 
   const handleSubmitPayment = async (e) => {
     e.preventDefault();
@@ -57,10 +71,61 @@ const DetailOrderanPelanggan = () => {
       },
     });
 
+    try {
+      console.log("Selected Pegawai ID:", selectedPegawai);
+      console.log("Entered Password:", password);
+
+      const verifyResponse = await post("/pegawai/verify-password", {
+        pegawaiId: selectedPegawai,
+        password: password,
+      });
+
+      console.log("Verify Response:", verifyResponse);
+
+      if (!verifyResponse.valid) {
+        setIsLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Password Salah",
+          text: "Password pegawai yang dimasukkan salah",
+        });
+        return;
+      }
+    } catch (error) {
+      console.error("Error verifying password:", error);
+      setIsLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Terjadi kesalahan saat memverifikasi password",
+      });
+      return;
+    }
+    console.log("Data Pegawai:", dataPegawai);
+    const selectedPegawaiObj = dataPegawai.find(
+      (pegawai) => pegawai.id === Number(selectedPegawai)
+    );
+    console.log("Selected Pegawai Object:", selectedPegawaiObj);
+    if (!selectedPegawaiObj) {
+      console.error("Selected Pegawai not found in dataPegawai");
+      setIsLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Pegawai yang dipilih tidak ditemukan",
+      });
+      return;
+    }
+    const selectedPegawaiNama = selectedPegawaiObj.namaPegawai;
     const formDataUpdate = new FormData();
     formDataUpdate.append("statusPesanan", selectedValue);
+    formDataUpdate.append("pegawai", selectedPegawaiNama);
 
     try {
+      console.log("Form Data Update:", formDataUpdate);
+      for (let pair of formDataUpdate.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
       await put(`/order/update-order/${id}`, formDataUpdate);
       navigate("/detail-orderan-pelanggan");
       setIsLoading(false);
@@ -71,6 +136,12 @@ const DetailOrderanPelanggan = () => {
       });
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Terjadi kesalahan saat mengubah status order",
+      });
     }
   };
 
@@ -212,6 +283,38 @@ const DetailOrderanPelanggan = () => {
                   Pesanan ditolak
                 </option>
               </select>
+            </label>
+            <label className="flex flex-col gap-2 my-3">
+              <p className="w-max">Pegawai Penerima</p>
+              <select
+                className={`w-full ${
+                  currTheme == "light" ? "bg-slate-200" : "bg-slate-800"
+                } p-3`}
+                name="pegawaiPenerima"
+                id="pegawaiPenerima"
+                onChange={(e) => setSelectedPegawai(e.target.value)}
+                required
+              >
+                <option value="">--- Pilih Pegawai ---</option>
+                {dataPegawai.map((pegawai) => (
+                  <option key={pegawai.id} value={pegawai.id}>
+                    {pegawai.namaPegawai}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-2 my-3">
+              <p className="w-max">Password Pegawai</p>
+              <input
+                className={`w-full ${
+                  currTheme == "light" ? "bg-slate-200" : "bg-slate-800"
+                } p-3`}
+                type="password"
+                name="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </label>
             <button
               className="w-full bg-lime-300 p-2 rounded text-black my-3 font-bold"

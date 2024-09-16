@@ -141,13 +141,24 @@ const OrderDetailCustomer = () => {
     <div className="flex justify-center">
       <div className="max-w-lg w-full h-screen">
         <h1 className="text-2xl font-bold py-6 text-center">Resi Pesanan</h1>
-        <h2 className="text-xl py-3 bg-green-500 text-center rounded font-bold">
-          Pesanan Berhasil
+        <h2
+          className={`text-xl py-3 text-center rounded font-bold ${
+            currStatus === "Pesanan ditolak" ||
+            dataOrder.statusPesanan === "Pesanan ditolak"
+              ? "bg-red-500"
+              : "bg-green-500"
+          }`}
+        >
+          {currStatus === "Pesanan ditolak" ||
+          dataOrder.statusPesanan === "Pesanan ditolak"
+            ? "Pesanan Ditolak"
+            : "Pesanan Berhasil"}
         </h2>
         <p className="py-2">
-          Terima Kasih telah order makanan maupun minuman di tempat kami, untuk
-          pesanan Anda bisa dilihat statusnya. Jika Sudah Selesai Silahkan Ambil
-          Pesananya di Kasir
+          {currStatus === "Pesanan ditolak" ||
+          dataOrder.statusPesanan === "Pesanan ditolak"
+            ? "Maaf, pesanan Anda telah ditolak. Silakan hubungi kasir untuk informasi lebih lanjut."
+            : "Terima Kasih telah order makanan maupun minuman di tempat kami, untuk pesanan Anda bisa dilihat statusnya. Jika Sudah Selesai Silahkan Ambil Pesananya di Kasir"}
         </p>
         <div
           className={`border ${

@@ -123,7 +123,7 @@ const OrderPage = () => {
   const handleSelectMenu = (id) => {
     const selectedMenu = dataMenu.find((menu) => menu.id === id);
 
-    if (selectedMenu) {
+    if (selectedMenu && selectedMenu.stokMenu > 0) {
       setCart((prevCart) => {
         const itemIndex = prevCart.findIndex((item) => item.menuId === id);
         if (itemIndex > -1) {
@@ -184,6 +184,12 @@ const OrderPage = () => {
           ];
         }
       });
+      // Decrease the stock of the selected menu item
+      setDataMenu((prevDataMenu) =>
+        prevDataMenu.map((menu) =>
+          menu.id === id ? { ...menu, stokMenu: menu.stokMenu - 1 } : menu
+        )
+      );
       setTopingSelected({});
     }
   };
@@ -219,20 +225,28 @@ const OrderPage = () => {
   }, [topingSelected, cart]);
 
   const handleIncrement = (id, menuId) => {
-    console.log(id);
     const selectedMenu = dataMenu.find((menu) => menu.id === menuId);
 
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              jumlah: item.jumlah + 1,
-              harga: (item.jumlah + 1) * selectedMenu.hargaMenu,
-            }
-          : item
-      )
-    );
+    if (selectedMenu && selectedMenu.stokMenu > 0) {
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === id
+            ? {
+                ...item,
+                jumlah: item.jumlah + 1,
+                harga: (item.jumlah + 1) * selectedMenu.hargaMenu,
+              }
+            : item
+        )
+      );
+
+      // Decrease the stock of the selected menu item
+      setDataMenu((prevDataMenu) =>
+        prevDataMenu.map((menu) =>
+          menu.id === menuId ? { ...menu, stokMenu: menu.stokMenu - 1 } : menu
+        )
+      );
+    }
   };
 
   const handleDecrement = (id, menuId) => {
@@ -250,6 +264,13 @@ const OrderPage = () => {
             : item
         )
         .filter((item) => item.jumlah > 0)
+    );
+
+    // Increase the stock of the selected menu item
+    setDataMenu((prevDataMenu) =>
+      prevDataMenu.map((menu) =>
+        menu.id === menuId ? { ...menu, stokMenu: menu.stokMenu + 1 } : menu
+      )
     );
   };
 

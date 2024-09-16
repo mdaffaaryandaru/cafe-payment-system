@@ -103,12 +103,20 @@ const OrderanPelanggan = () => {
       flex: 0.5,
     },
     {
+      field: "pegawai",
+      headerName: "Pegawai yang Melayani",
+      flex: 0.5,
+    },
+    {
       field: "actions",
       headerName: "Actions",
       flex: 0.5,
       renderCell: (params) => (
         <div className="w-full">
-          <Link className="bg-lime-400 p-2 text-black rounded w-fit" to={`/detail-orderan-pelanggan/${params.row.id}`}>
+          <Link
+            className="bg-lime-400 p-2 text-black rounded w-fit"
+            to={`/detail-orderan-pelanggan/${params.row.id}`}
+          >
             {params.row.statusPesanan}
           </Link>
         </div>

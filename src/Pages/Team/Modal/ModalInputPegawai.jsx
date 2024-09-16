@@ -27,6 +27,7 @@ const styleModal = {
 const ModalInputPegawai = ({ dataForm, setDataForm, handleOnSubmit }) => {
   // for open modal add
   const [open, setOpen] = React.useState(false);
+  const [reEnterPassword, setReEnterPassword] = React.useState("");
 
   const handleOnChange = (e) => {
     const { name, value, type } = e.target;
@@ -36,7 +37,16 @@ const ModalInputPegawai = ({ dataForm, setDataForm, handleOnSubmit }) => {
     });
   };
 
+  const handleReEnterPasswordChange = (e) => {
+    setReEnterPassword(e.target.value);
+  };
+
   const handleSubmit = (e) => {
+    e.preventDefault();
+    if (dataForm.password !== reEnterPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
     handleOnSubmit(e);
     setOpen(false);
   };
@@ -95,6 +105,24 @@ const ModalInputPegawai = ({ dataForm, setDataForm, handleOnSubmit }) => {
               type="number"
               name="noHpPegawai"
               onChange={handleOnChange}
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Password Pegawai"
+              color="secondary"
+              type="password"
+              name="password"
+              onChange={handleOnChange}
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Re-enter Password"
+              color="secondary"
+              type="password"
+              name="reEnterPassword"
+              onChange={handleReEnterPasswordChange}
             />
             <FormControl color="secondary" fullWidth sx={{ mt: 3 }}>
               <InputLabel>Status Pegawai</InputLabel>

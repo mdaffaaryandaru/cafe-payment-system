@@ -48,12 +48,14 @@ const Team = () => {
     alamatPegawai: "",
     noHpPegawai: "",
     statusPegawai: "",
+    password: "",
   });
   const [formDataEdit, setFormDataEdit] = React.useState({
     namaPegawai: "",
     alamatPegawai: "",
     noHpPegawai: "",
     statusPegawai: "",
+    password: "",
   });
 
   const fetchItems = async () => {
@@ -82,6 +84,7 @@ const Team = () => {
     newFormData.append("alamatPegawai", formData.alamatPegawai);
     newFormData.append("noHpPegawai", formData.noHpPegawai);
     newFormData.append("statusPegawai", formData.statusPegawai);
+    newFormData.append("password", formData.password);
 
     try {
       const response = await post("/pegawai/create-pegawai", newFormData);
@@ -112,6 +115,7 @@ const Team = () => {
     newFormData.append("alamatPegawai", formDataEdit.alamatPegawai);
     newFormData.append("noHpPegawai", formDataEdit.noHpPegawai);
     newFormData.append("statusPegawai", formDataEdit.statusPegawai);
+    newFormData.append("password", formDataEdit.password);
 
     try {
       await put(`/pegawai/update-pegawai/${id}`, newFormData);
